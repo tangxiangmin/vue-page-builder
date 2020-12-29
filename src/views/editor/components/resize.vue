@@ -44,15 +44,19 @@ export default {
   data() {
     return {
       posList: ['tl', 'tm', 'tr', 'ml', 'mr', 'bl', 'bm', 'br'],
+      // 尺寸
       width: 0,
-      height: 0
+      height: 0,
+      // 定位
+      left: 0,
+      top: 0
     }
   },
   computed: {
     style() {
       if (!this.isActive) return
       if (!this.width && !this.height) return
-      return { width: this.width, height: this.height }
+      return { width: this.width, height: this.height, left: this.left, top: this.top }
     }
   },
   watch: {
@@ -103,8 +107,8 @@ export default {
       }
 
       const init = () => {
-        const originHeight = oWrap.clientHeight
-        const originWidth = oWrap.clientWidth
+        const originHeight = oWrap.children[0].clientHeight
+        const originWidth = oWrap.children[0].clientWidth
 
         let startY
         let startX
@@ -117,7 +121,7 @@ export default {
         // 事件处理函数
         const mouseStart = e => {
           direction = getHandleDirection(e)
-          if (direction === DIRECTION.none) return
+          // if (direction === DIRECTION.none) return
 
           startY = getTouchY(e) - offset
           startX = getTouchX(e) - offsetX
@@ -143,6 +147,10 @@ export default {
           } else if (direction === DIRECTION.all) {
             this.width = targetWidth
             this.height = targetHeight
+          } else {
+            // 拖动位置
+            this.left = diffX + 'px'
+            this.top = diffY + 'px'
           }
 
           e.preventDefault()

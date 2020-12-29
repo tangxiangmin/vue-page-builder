@@ -1,6 +1,8 @@
 <script>
 import resizeContainer from './resize'
 import customImage from './customImage'
+import useDrag from '@/hooks/useDrag'
+
 export default {
   name: 'AbstractContainer',
   components: { resizeContainer },
@@ -20,18 +22,31 @@ export default {
     if (!config) return null
 
     const { style } = config
-    const child = h(type, {
-      ...widget,
-      style,
-      props: {
-        config
+
+    // todo 使用代理优化此处逻辑
+
+    const renderNode = (proxyShape) => {
+      const tmpStyle = { ...style }
+      if (proxyShape) {
+        delete tmpStyle.left
+        delete tmpStyle.top
       }
-    }, config.children)
+
+      return h(type, {
+        ...widget,
+        style: tmpStyle,
+        props: {
+          config
+        }
+      }, config.children)
+    }
 
     const onResize = (size) => {
-      const { width, height } = size
+      const { width, height, left, top } = size
       this.$set(style, 'width', width)
       this.$set(style, 'height', height)
+      this.$set(style, 'left', left)
+      this.$set(style, 'top', top)
     }
     // 图片支持拖拽调整尺寸
     // todo 后续支持其他组件调整尺寸
@@ -42,9 +57,9 @@ export default {
         on: {
           resize: onResize
         }
-      }, [child])
+      }, [renderNode(true)])
     } else {
-      return child
+      return renderNode()
     }
   }
 }

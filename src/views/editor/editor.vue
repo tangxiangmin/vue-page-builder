@@ -187,7 +187,6 @@ export default {
       if (widget.type === 'text') {
         // widget.type = 'span'
         widget.config.style.top = originalEvent.offsetY
-        console.log(widget)
       }
       this.page.children.splice(newIndex, 1, widget)
     },
@@ -236,7 +235,8 @@ export default {
 
     width: 100%;
     height: 100%;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     /*滚动条的轨道*/
     &::-webkit-scrollbar-track {
       box-shadow: inset 0 0 5px rgba(0, 0, 0, .3);
