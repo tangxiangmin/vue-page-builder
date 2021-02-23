@@ -2,7 +2,13 @@ import Vue from 'vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
+import '@shymean/vue-contextmenu/dist/index.css'
+import contextmenu from '@shymean/vue-contextmenu'
+
 import compositionApi from '@vue/composition-api'
+
+console.log(contextmenu)
+Vue.use(contextmenu)
 
 import App from './App.vue'
 

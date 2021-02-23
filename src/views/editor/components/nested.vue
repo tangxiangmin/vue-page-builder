@@ -1,12 +1,9 @@
 <template>
   <draggable :class="{'drag-area':true,'page-root':root}" :list="list" :options="dragOptions" ghost-class="ghost">
-    <!--    <li v-for="el in list" :key="el.name">-->
-    <!--      <p>{{ el.name }}</p>-->
-    <!--      <nested-draggable :list="el.children" />-->
-    <!--    </li>-->
     <abstractContainer
       v-for="(item, index) in list"
       :key="index"
+      v-contextmenu="{menuList:widgetMenuList, onShow:chooseComponent.bind(this, item) }"
       class="widget"
       :class="{'widget-selected': currentComponent === item}"
       :is-active=" currentComponent === item"
@@ -57,6 +54,27 @@ export default {
     },
     currentComponent() {
       return this.$store.state.editor.currentComponent
+    },
+    widgetMenuList() {
+      return [
+        {
+          text: '复制组件',
+          onClick: () => {
+            this.copyWidget()
+          }
+        },
+        {
+          text: '删除组件', onClick: () => {
+            this.removeWidget()
+          }
+        }
+
+      ]
+    }
+  },
+  watch: {
+    disabled(newVal) {
+      console.log('disabled：', newVal)
     }
   },
   created() {
@@ -65,6 +83,21 @@ export default {
   methods: {
     chooseComponent(item) {
       this.$store.commit('editor/setCurrentComponent', item)
+    },
+    copyWidget() {
+      const { currentComponent } = this
+      const index = this.list.indexOf(currentComponent)
+      const widget = { ...currentComponent }
+      widget.id = +new Date()
+      this.list.splice(index, 0, widget)
+    },
+    removeWidget() {
+      const { currentComponent } = this
+      const index = this.list.indexOf(currentComponent)
+      this.$confirm('是否确认移除当前组件').then(() => {
+        this.list.splice(index, 1)
+      }).catch(() => {
+      })
     }
   }
 }
@@ -84,6 +117,8 @@ export default {
 
 .drag-area {
   min-height: 50px;
+  height: 100%;
+  //background-color: #42b983;
 }
 
 .ghost {
