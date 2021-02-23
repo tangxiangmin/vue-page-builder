@@ -15,7 +15,14 @@ npm run serve
 
 后台项目
 ```
-// todo
+cd server
+
+npm i
+ 
+// 初始化表，需要先配置好数据库连接
+npx sequelize db:migrate
+
+npm tun dev
 ```
 
 预览项目
