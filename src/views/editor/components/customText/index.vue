@@ -1,5 +1,5 @@
 <template>
-  <div>{{ config.content }}</div>
+  <span>{{ config.content }}</span>
 </template>
 
 <script>

@@ -1,7 +1,7 @@
 <script>
 import resizeContainer from './resize'
-import customImage from './customImage'
-import useDrag from '@/hooks/useDrag'
+// import customImage from './customImage'
+// import useDrag from '@/hooks/useDrag'
 
 export default {
   name: 'AbstractContainer',
@@ -38,29 +38,30 @@ export default {
         props: {
           config
         }
-      }, config.children)
+      }, this.$slots.default)
     }
 
-    const onResize = (size) => {
-      const { width, height, left, top } = size
-      this.$set(style, 'width', width)
-      this.$set(style, 'height', height)
-      this.$set(style, 'left', left)
-      this.$set(style, 'top', top)
-    }
+    // const onResize = (size) => {
+    //   const { width, height, left, top } = size
+    //   this.$set(style, 'width', width)
+    //   this.$set(style, 'height', height)
+    //   this.$set(style, 'left', left)
+    //   this.$set(style, 'top', top)
+    // }
     // 图片支持拖拽调整尺寸
     // todo 后续支持其他组件调整尺寸
-    if (type === customImage.name) {
-      return h(resizeContainer, {
-        style: { ...style },
-        props: { isActive: this.isActive },
-        on: {
-          resize: onResize
-        }
-      }, [renderNode(true)])
-    } else {
-      return renderNode()
-    }
+    // if (type === customImage.name) {
+    //   return h(resizeContainer, {
+    //     style: { ...style },
+    //     props: { isActive: this.isActive },
+    //     on: {
+    //       resize: onResize
+    //     }
+    //   }, [renderNode(true)])
+    // } else {
+    //   return renderNode()
+    // }
+    return renderNode()
   }
 }
 </script>

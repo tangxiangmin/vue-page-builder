@@ -16,7 +16,10 @@
               <draggable
                 :list="group.list"
                 ghost-class="ghost"
+                :clone="cloneWidget"
                 :options="{group:{name: 'page',pull:'clone',put:false},sort: false}"
+                @start="startAdd"
+                @end="endAdd"
               >
                 <div v-for="item in group.list" :key="item.name" class="cell">
                   {{ item.name }}
@@ -35,36 +38,33 @@
             </el-button>
           </div>
           <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
-            <div class="mobile_content">
-              <draggable
-                :options="{group:{name: 'page', pull: 'clone'}, disabled: !isDraggable}"
-                :list=" page.children"
-                :move="checkMove"
-                class="widget-list"
-                ghost-class="ghost"
-                @add="handleWidgetAdd"
-                @change="changeOrder"
-              >
-                <abstractContainer
-                  v-for="(item, index) in normalChildren"
-                  :key="index"
-                  class="widget"
-                  :class="{'widget-selected': currentComponent === item}"
-                  :is-active=" currentComponent === item"
-                  :widget="item"
-                  @click.native="chooseComponent(item)"
-                />
-              </draggable>
-            </div>
-            <!--模拟fixed-->
-            <abstractContainer
-              v-for="(item, index) in fixedChildren"
-              :key="index"
-              :widget="item"
-              :class="{'widget-selected': currentComponent === item}"
-              :is-active=" currentComponent === item"
-              @click.native="chooseComponent(item)"
-            />
+            <nestedDraggable :list="page.children" :root="true" :disabled="false" />
+
+            <!--            <div class="mobile_content">-->
+            <!--              <draggable-->
+            <!--                :options="{group:{name: 'page', pull: 'clone'}, disabled: !isDraggable}"-->
+            <!--                :list=" page.children"-->
+            <!--                class="widget-list"-->
+            <!--                ghost-class="ghost"-->
+            <!--              >-->
+            <!--                <abstractContainer-->
+            <!--                  v-for="(item, index) in normalChildren"-->
+            <!--                  :key="index"-->
+            <!--                  class="widget"-->
+            <!--                  :class="{'widget-selected': currentComponent === item}"-->
+            <!--                  :is-active=" currentComponent === item"-->
+            <!--                  :widget="item"-->
+            <!--                />-->
+            <!--              </draggable>-->
+            <!--            </div>-->
+            <!--            &lt;!&ndash;模拟fixed&ndash;&gt;-->
+            <!--            <abstractContainer-->
+            <!--              v-for="(item, index) in fixedChildren"-->
+            <!--              :key="index"-->
+            <!--              :widget="item"-->
+            <!--              :class="{'widget-selected': currentComponent === item}"-->
+            <!--              :is-active=" currentComponent === item"-->
+            <!--            />-->
           </div>
         </div>
         <div class="page_config config">
@@ -122,9 +122,11 @@ import abstractContainer from './components/abstractContainer'
 import commonConfig from '@/views/editor/components/commonConfig'
 import pageConfig from '@/views/editor/components/pageConfig'
 
+import nestedDraggable from './components/nested'
+
 export default {
   name: 'Editor',
-  components: { VJsoneditor, draggable, abstractContainer, commonConfig, pageConfig },
+  components: { nestedDraggable, VJsoneditor, draggable, abstractContainer, commonConfig, pageConfig },
   data() {
     return {
       componentList,
@@ -165,30 +167,19 @@ export default {
         this.page = page
       })
     },
-    checkMove() {
-
+    startAdd() {
+      this.$store.commit('editor/setAddStatus', true)
     },
-    changeOrder(e) {
-      console.log(e)
-      // if (e.moved) {
-      //   const { element, oldIndex, newIndex } = e.moved
-      //   console.log(this.page.children)
-      // }
+    endAdd() {
+      this.$store.commit('editor/setAddStatus', false)
     },
-    chooseComponent(item) {
-      this.$store.commit('editor/setCurrentComponent', item)
-    },
-    // 增加页面widget
-    handleWidgetAdd(e) {
-      const { newIndex, originalEvent } = e
-
-      const item = this.page.children[newIndex]
-      const widget = { ...item, config: item.getTemplate() }
-      if (widget.type === 'text') {
-        // widget.type = 'span'
-        widget.config.style.top = originalEvent.offsetY
+    cloneWidget(item) {
+      return {
+        id: +new Date(),
+        ...item,
+        config: item.getTemplate(),
+        children: []
       }
-      this.page.children.splice(newIndex, 1, widget)
     },
     removeWidget() {
       const { currentComponent } = this
@@ -222,6 +213,7 @@ export default {
 .mobile {
   transform: translateX(0); // 处理容器中的fixed样式
   width: 375px;
+  min-height: 667px;
   margin: 0 auto;
   border: 1px solid #000;
   box-sizing: content-box;
@@ -263,13 +255,6 @@ export default {
     }
 
   }
-}
-
-.ghost {
-  background-color: #ccc;
-  height: 100px;
-  text-align: center;
-  line-height: 100px;
 }
 
 .page {
@@ -348,11 +333,4 @@ export default {
   text-align: center;
 }
 
-.widget {
-  &-selected {
-    //transform: scale(0.98);
-    //transition: transform linear .3s;
-    outline: 1px solid #ff0000;
-  }
-}
 </style>

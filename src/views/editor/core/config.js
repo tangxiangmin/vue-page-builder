@@ -30,6 +30,7 @@ const container = {
     return {
       ...baseConfig,
       children: [],
+      nested: false,
       style: {
         height: '100px',
         background: '#dedede'
@@ -46,8 +47,9 @@ const text = {
     return {
       ...baseConfig,
       content: 'hello',
-      absolute: true,
-      style: { position: 'absolute', zIndex: 99 }
+      style: {}
+      // absolute: true,
+      // style: { position: 'absolute', zIndex: 99 }
     }
   }
 }

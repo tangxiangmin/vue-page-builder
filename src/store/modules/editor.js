@@ -4,7 +4,8 @@ export default {
   namespaced: true,
   state: {
     pageDetail: null,
-    currentComponent: null
+    currentComponent: null,
+    isAddStatus: false
   },
   mutations: {
     setPageDetail(state, payload) {
@@ -12,6 +13,9 @@ export default {
     },
     setCurrentComponent(state, payload) {
       state.currentComponent = payload
+    },
+    setAddStatus(state, payload) {
+      state.isAddStatus = payload
     }
   },
   actions: {
@@ -25,6 +29,9 @@ export default {
     async getPageDetail({ commit }, { id }) {
       const { data } = await getPageDetail(id)
       commit('setPageDetail', data)
+    },
+    async addComponent() {
+
     }
   }
 }

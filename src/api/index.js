@@ -30,22 +30,94 @@ export function getPageDetail() {
         'type': 'pure',
         'config': {},
         'children': [
-          {
-            'name': '图片',
-            'type': 'CustomImage',
-            'configType': 'CustomImageConfig',
-            'config': {
-              'id': '',
-              'click': {
-                'type': '',
-                'args': '',
-                'logType': '',
-                'logParams': ''
-              },
-              'src': '/img/logo.82b9c7a5.png',
-              'style': {}
-            }
-          }
+          // {
+          //   name: '容器',
+          //   type: 'div',
+          //   configType: 'CustomContainerConfig',
+          //   id: '',
+          //   config: {
+          //     'click': {
+          //       'type': '',
+          //       'args': '',
+          //       'logType': '',
+          //       'logParams': ''
+          //     },
+          //     style: {
+          //       height: '200px',
+          //       background: 'red'
+          //     }
+          //   },
+          //   children: [
+          //     {
+          //       name: '文字',
+          //       type: 'CustomText',
+          //       configType: 'CustomTextConfig',
+          //       config: {
+          //         id: '',
+          //         content: 'hello'
+          //         // absolute: true,
+          //         // style: { position: 'absolute', zIndex: 99 }
+          //       }
+          //     },
+          //     {
+          //       name: '容器',
+          //       type: 'div',
+          //       configType: 'CustomContainerConfig',
+          //       config: {
+          //         'id': '',
+          //         'click': {
+          //           'type': '',
+          //           'args': '',
+          //           'logType': '',
+          //           'logParams': ''
+          //         },
+          //         children: [
+          //
+          //         ],
+          //         style: {
+          //           height: '50px',
+          //           background: 'blue'
+          //         }
+          //       }
+          //     }
+          //   ]
+          // },
+          // {
+          //   name: '容器1',
+          //   type: 'div',
+          //   configType: 'CustomContainerConfig',
+          //   config: {
+          //     'id': '',
+          //     'click': {
+          //       'type': '',
+          //       'args': '',
+          //       'logType': '',
+          //       'logParams': ''
+          //     },
+          //     style: {
+          //       height: '100px',
+          //       background: '#dedede'
+          //     }
+          //   },
+          //   children: []
+          // }
+
+          // {
+          //   'name': '图片',
+          //   'type': 'CustomImage',
+          //   'configType': 'CustomImageConfig',
+          //   'config': {
+          //     'id': '',
+          //     'click': {
+          //       'type': '',
+          //       'args': '',
+          //       'logType': '',
+          //       'logParams': ''
+          //     },
+          //     'src': '/img/logo.82b9c7a5.png',
+          //     'style': {}
+          //   }
+          // }
         ]
       })
     }
