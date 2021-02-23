@@ -1,14 +1,14 @@
 <template>
-  <draggable :class="{'drag-area':true,'page-root':root}" :list="list" :options="dragOptions" ghost-class="ghost">
+  <draggable :class="{'drag-area':true,'page-root':root}" :list="list" :options="dragOptions" ghost-class="ghost" @add="addWidget">
     <abstractContainer
       v-for="(item, index) in list"
       :key="index"
-      v-contextmenu="{menuList:widgetMenuList, onShow:chooseComponent.bind(this, item) }"
+      v-contextmenu="{menuList:widgetMenuList, onShow:chooseWidget.bind(this, item) }"
       class="widget"
       :class="{'widget-selected': currentComponent === item}"
       :is-active=" currentComponent === item"
       :widget="item"
-      @click.native.stop="chooseComponent(item)"
+      @click.native.stop="chooseWidget(item)"
     >
       <nested-draggable :list="item.children" :disabled="!item.config.nested" />
     </abstractContainer>
@@ -17,6 +17,7 @@
 <script>
 import draggable from 'vuedraggable'
 import abstractContainer from './abstractContainer'
+import eventBus, { ACTION_RECORD } from '@/views/editor/core/eventBus'
 
 export default {
   name: 'NestedDraggable',
@@ -81,8 +82,11 @@ export default {
     // console.log(this.disabled)
   },
   methods: {
-    chooseComponent(item) {
+    chooseWidget(item) {
       this.$store.commit('editor/setCurrentComponent', item)
+    },
+    addWidget() {
+      eventBus.$emit(ACTION_RECORD)
     },
     copyWidget() {
       const { currentComponent } = this
@@ -90,12 +94,15 @@ export default {
       const widget = { ...currentComponent }
       widget.id = +new Date()
       this.list.splice(index, 0, widget)
+      eventBus.$emit(ACTION_RECORD)
     },
     removeWidget() {
       const { currentComponent } = this
       const index = this.list.indexOf(currentComponent)
       this.$confirm('是否确认移除当前组件').then(() => {
         this.list.splice(index, 1)
+
+        eventBus.$emit(ACTION_RECORD)
       }).catch(() => {
       })
     }

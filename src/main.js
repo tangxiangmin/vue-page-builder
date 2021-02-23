@@ -7,7 +7,6 @@ import contextmenu from '@shymean/vue-contextmenu'
 
 import compositionApi from '@vue/composition-api'
 
-console.log(contextmenu)
 Vue.use(contextmenu)
 
 import App from './App.vue'

@@ -5,6 +5,23 @@
         <el-button type="primary" @click="savePage">
           保存页面
         </el-button>
+        <el-popover
+          placement="top-start"
+          trigger="hover"
+          title="快捷方式"
+          class="shortcut-tip"
+        >
+          <i slot="reference" class="el-icon-warning-outline" />
+          <div class="shortcut">
+            <div v-for="item in shortcutList" :key="item.key" class="shortcut_item">
+              <strong>{{ item.key }} </strong> : {{ item.desc }}
+            </div>
+            <div class="shortcut_item">
+              <strong>鼠标右键选中</strong>： 复制和删除
+            </div>
+          </div>
+          <div />
+        </el-popover>
       </div>
       <div class="page_bd">
         <div class="page_sd side">
@@ -76,11 +93,6 @@
                   <component :is="currentComponent.configType" :config="currentComponent.config" />
 
                   <commonConfig :config="currentComponent.config" />
-                  <el-form-item label="操作">
-                    <el-button type="danger" @click="removeWidget">
-                      删除控件
-                    </el-button>
-                  </el-form-item>
                 </el-form>
               </template>
               <template v-else>
@@ -114,6 +126,7 @@
 <script>
 import VJsoneditor from 'v-jsoneditor/src/index'
 import draggable from 'vuedraggable'
+import hotkeys from 'hotkeys-js'
 
 import { componentList, createTemplate } from './core/config'
 import './core/registerComponent'
@@ -123,6 +136,7 @@ import commonConfig from '@/views/editor/components/commonConfig'
 import pageConfig from '@/views/editor/components/pageConfig'
 
 import nestedDraggable from './components/nested'
+import eventBus, { ACTION_RECORD } from '@/views/editor/core/eventBus'
 
 export default {
   name: 'Editor',
@@ -149,12 +163,54 @@ export default {
     },
     fixedChildren() {
       return this.page.children.filter(item => item.config && item.config.style.position === 'fixed')
+    },
+    shortcutList() {
+      return [
+        {
+          key: 'command+z',
+
+          desc: '撤销',
+          handler: (e) => {
+            this.undo()
+            e.preventDefault()
+          }
+        },
+        {
+          key: 'command+shift+z',
+          desc: '重做',
+          handler: (e) => {
+            this.redo()
+            e.preventDefault()
+          }
+        },
+        {
+          key: 'command+s',
+          desc: '保存',
+          handler: (e) => {
+            this.savePage()
+            e.preventDefault()
+          }
+        }
+      ]
     }
+  },
+  beforeDestroy() {
+    this.unbindHotkeys()
+    this.offEventBus()
   },
   created() {
     this.initPage()
+    this.initShortcut()
+    this.initEventBus()
   },
   methods: {
+    initEventBus() {
+      eventBus.$on(ACTION_RECORD, this.recordAction)
+
+      this.offEventBus = () => {
+        eventBus.$off(ACTION_RECORD, this.recordAction)
+      }
+    },
     initPage() {
       this.$store.dispatch('editor/getPageDetail', { id: this.$route.query.id }).then(() => {
         let page = createTemplate()
@@ -165,13 +221,44 @@ export default {
           console.log(e)
         }
         this.page = page
+        this.recordAction()
       })
     },
+    initShortcut() {
+      this.shortcutList.forEach(({ key, handler }) => {
+        hotkeys(key, handler)
+      })
+
+      this.unbindHotkeys = () => {
+        this.shortcutList.forEach(({ key, handler }) => {
+          hotkeys.unbind(key, handler)
+        })
+      }
+    },
+    recordAction() {
+      this.$store.dispatch('editor/recordAction', this.page)
+    },
+    undo() {
+      this.$store.dispatch('editor/undo').then(data => {
+        if (data) {
+          this.page = data
+        }
+      })
+    },
+    redo() {
+      this.$store.dispatch('editor/redo').then(data => {
+        if (data) {
+          this.page = data
+        }
+      })
+    },
+    // 页面交互
     startAdd() {
       this.$store.commit('editor/setAddStatus', true)
     },
     endAdd() {
       this.$store.commit('editor/setAddStatus', false)
+      console.log('123')
     },
     cloneWidget(item) {
       return {
@@ -180,14 +267,6 @@ export default {
         config: item.getTemplate(),
         children: []
       }
-    },
-    removeWidget() {
-      const { currentComponent } = this
-      const index = this.page.children.indexOf(currentComponent)
-      this.$confirm('是否确认移除当前组件').then(() => {
-        this.page.children.splice(index, 1)
-      }).catch(() => {
-      })
     },
     savePage() {
       this.dialogSaveVisible = true
