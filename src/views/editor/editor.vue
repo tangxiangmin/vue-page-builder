@@ -87,14 +87,14 @@
         <div class="page_config config">
           <el-tabs type="card" value="1">
             <el-tab-pane label="控件配置项" name="1">
-              <template v-if="currentComponent">
+              <div v-if="currentComponent" :key="currentComponent.id">
                 <el-form label-width="80px">
                   <el-alert title="控件配置" style="margin-bottom: 10px" :closable="false" />
                   <component :is="currentComponent.configType" :config="currentComponent.config" />
 
                   <commonConfig :config="currentComponent.config" />
                 </el-form>
-              </template>
+              </div>
               <template v-else>
                 <div>请选择一个控件</div>
               </template>
@@ -136,7 +136,7 @@ import pageConfig from '@/views/editor/components/pageConfig'
 
 import { componentList, Page } from './core/widget'
 
-import nestedDraggable from './components/nested'
+import nestedDraggable from './components/rootContainer'
 import eventBus, { ACTION_RECORD } from '@/views/editor/core/eventBus'
 
 export default {
@@ -217,7 +217,7 @@ export default {
         const page = new Page()
 
         if (this.pageDetail) {
-          page.init(this.pageDetail.content)
+          page.initFromJSON(this.pageDetail.content)
         }
 
         this.page = page
@@ -290,6 +290,7 @@ export default {
   margin: 0 auto;
   border: 1px solid #000;
   box-sizing: content-box;
+  background: url('../../assets/transparent.png') repeat;
 
   &-fixed {
     height: 667px;

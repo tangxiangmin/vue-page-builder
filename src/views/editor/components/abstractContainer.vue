@@ -26,15 +26,18 @@ export default {
     // todo 使用代理优化此处逻辑
 
     const renderNode = (proxyShape) => {
-      const tmpStyle = { ...style }
-      if (proxyShape) {
-        delete tmpStyle.left
-        delete tmpStyle.top
+      // const tmpStyle = { ...style }
+      // if (proxyShape) {
+      //   delete tmpStyle.left
+      //   delete tmpStyle.top
+      // }
+      if (type === 'CustomContainer') {
+        return this.$slots.default
       }
 
       return h(type, {
         ...widget,
-        style: tmpStyle,
+        style: style,
         props: {
           config
         }

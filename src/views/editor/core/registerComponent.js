@@ -35,7 +35,7 @@ function createRegisterComponent(specialConfig = {}) {
 const componentList = ['customImage', 'customContainer', 'customText']
 
 componentList.forEach(createRegisterComponent({
-  'CustomContainer': {
-    ignoreRegister: true
-  }
+  // 'CustomContainer': {
+  //   ignoreRegister: true
+  // }
 }))
