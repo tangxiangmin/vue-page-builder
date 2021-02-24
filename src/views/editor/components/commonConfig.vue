@@ -51,6 +51,9 @@
     <el-form-item label="背景色">
       <el-color-picker v-model="style.backgroundColor" show-alpha />
     </el-form-item>
+    <el-form-item label="浮动">
+      <el-input v-model="style.float" />
+    </el-form-item>
     <el-form-item label="宽高">
       <el-row>
         <el-col :span="6">

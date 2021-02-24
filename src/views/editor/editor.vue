@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="page">
     <div class=" page">
       <div class="page_hd">
         <el-button type="primary" @click="savePage">
@@ -38,8 +38,8 @@
                 @start="startAdd"
                 @end="endAdd"
               >
-                <div v-for="item in group.list" :key="item.name" class="cell">
-                  {{ item.name }}
+                <div v-for="item in group.list" :key="item.label" class="cell">
+                  {{ item.label }}
                 </div>
               </draggable>
             </div>
@@ -128,12 +128,13 @@ import VJsoneditor from 'v-jsoneditor/src/index'
 import draggable from 'vuedraggable'
 import hotkeys from 'hotkeys-js'
 
-import { componentList, createTemplate } from './core/config'
 import './core/registerComponent'
 
 import abstractContainer from './components/abstractContainer'
 import commonConfig from '@/views/editor/components/commonConfig'
 import pageConfig from '@/views/editor/components/pageConfig'
+
+import { componentList, Page } from './core/widget'
 
 import nestedDraggable from './components/nested'
 import eventBus, { ACTION_RECORD } from '@/views/editor/core/eventBus'
@@ -144,7 +145,7 @@ export default {
   data() {
     return {
       componentList,
-      page: createTemplate(),
+      page: null,
       isFixedMode: true,
       isDraggable: true,
       dialogSaveVisible: false,
@@ -213,13 +214,12 @@ export default {
     },
     initPage() {
       this.$store.dispatch('editor/getPageDetail', { id: this.$route.query.id }).then(() => {
-        let page = createTemplate()
-        if (!this.pageDetail) return page
-        try {
-          page = JSON.parse(this.pageDetail.content)
-        } catch (e) {
-          console.log(e)
+        const page = new Page()
+
+        if (this.pageDetail) {
+          page.init(this.pageDetail.content)
         }
+
         this.page = page
         this.recordAction()
       })
@@ -258,15 +258,9 @@ export default {
     },
     endAdd() {
       this.$store.commit('editor/setAddStatus', false)
-      console.log('123')
     },
-    cloneWidget(item) {
-      return {
-        id: +new Date(),
-        ...item,
-        config: item.getTemplate(),
-        children: []
-      }
+    cloneWidget(Widget) {
+      return new Widget()
     },
     savePage() {
       this.dialogSaveVisible = true

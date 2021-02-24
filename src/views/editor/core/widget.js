@@ -1,72 +1,106 @@
+
+// let globalId = 1
 class BaseWidget {
   constructor() {
     this.type = ''
     this.configType = ''
-    this.id = ''
 
-    this.click = {
-      type: '',
-      args: ''
-    }
+    this.id = +new Date() // todo 随机uuid
 
-    this.config = {}
+    // this.click = {
+    //   type: '',
+    //   args: ''
+    // }
+
+    this.config = this.getConfig()
 
     this.children = []
   }
 
-  getTemplate() {
+  getConfig() {
     return {}
   }
 }
 
-export class ImageWidget extends BaseWidget {
-    name = '图片'
-    type = 'CustomImage'
+export class Page extends BaseWidget {
+  constructor(props) {
+    super(props)
+    this.type = 'pure'
+    this.config = {}
+    this.children = []
+  }
 
-    getTemplate() {
+  init(json) {
+    try {
+      const { config, children } = JSON.parse(json)
+      this.config = config
+      this.children = children
+    } catch (e) {
+      console.log(e)
+    }
+  }
+}
+
+export class ImageWidget extends BaseWidget {
+    static label = '图片'
+
+    constructor() {
+      super()
+      this.name = ImageWidget.label
+
+      this.type = 'CustomImage'
+      this.configType = 'CustomImageConfig'
+    }
+
+    getConfig() {
       return {
-        src: 'http://localhost:9999/assets/images/sell/baseTrial/v5_2/1.png',
-        style: 'max-width:100%'
+        src: require('@/assets/logo.png'),
+        style: {}
       }
     }
 }
 
 export class ContainerWidget extends BaseWidget {
-    name = '容器'
-    type = 'div'
+    static label = '容器'
+    constructor() {
+      super()
+      this.name = ContainerWidget.label
+      this.type = 'div'
+      this.configType = 'CustomContainerConfig'
+    }
 
-    getTemplate() {
+    getConfig() {
       return {
+        nested: false,
         style: {
           height: '100px',
-          width: '100%',
-          background: 'red'
+          background: '#dedede'
         }
       }
     }
 }
 
 export class TextWidget extends BaseWidget {
-    name = '文字'
-    type = 'CustomText'
+    static label = '文字'
 
-    getTemplate() {
+    constructor(props) {
+      super(props)
+      this.name = TextWidget.label
+      this.type = 'CustomText'
+      this.configType = 'CustomTextConfig'
+    }
+
+    getConfig() {
       return {
         content: 'hello',
         absolute: true,
-        style: { position: 'absolute', zIndex: 99 }
+        style: { }
       }
     }
 }
 
-export class Page {
-  constructor() {
-    this.type = 'page' // 区分不同的页面类型，如兑换码售卖、打包课售卖、常规课售卖页等
-    this.children = []
-  }
-
-  addWidget(template) {
-    this.children.push(template)
-  }
-}
+export const componentList = [
+  { title: '基础控件', list: [ImageWidget, ContainerWidget, TextWidget] },
+  { title: '定制控件', list: [] }
+]
 
