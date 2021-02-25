@@ -23,11 +23,8 @@ export default class BaseWidget {
   initFromJSON(json) {
     try {
       const { config, children } = JSON.parse(json)
-
       this.config = config
-      this.children = children.map(child => {
-        return child.clone()
-      })
+      this.children = children
     } catch (e) {
       console.log(e)
     }

@@ -76,9 +76,23 @@ export class Page extends BaseWidget {
   }
 }
 
+// 根据模板创建
+export function createWidgetFromTemplate(template) {
+  const { name, content } = template
+  return {
+    label: name,
+    custom: true,
+    create() {
+      const widget = new ContainerWidget()
+      widget.initFromJSON(content)
+      return widget
+    }
+  }
+}
+
 export const componentList = [
-  { title: '基础控件', list: [ImageWidget, ContainerWidget, TextWidget] },
-  { title: '自定义控件', list: [{ label: '选项卡' }] },
-  { title: '高阶控件', list: [{ label: '数据源' }] }
+  { title: '基础控件', list: [ImageWidget, ContainerWidget, TextWidget] }
+  // { title: '自定义控件', list: [{ label: '选项卡' }] },
+  // { title: '高阶控件', list: [{ label: '数据源' }] }
 ]
 

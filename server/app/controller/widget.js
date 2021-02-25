@@ -2,13 +2,13 @@
 
 const CURDController = require('./curd');
 
-class PageController extends CURDController {
+class WidgetController extends CURDController {
   constructor(props) {
     super(props);
 
     const { ctx } = this;
-    this.model = ctx.model.Page;
+    this.model = ctx.model.Widget;
   }
 }
 
-module.exports = PageController;
+module.exports = WidgetController;

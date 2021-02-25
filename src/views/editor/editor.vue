@@ -25,25 +25,32 @@
       </div>
       <div class="page_bd">
         <div class="page_sd side">
-          <div v-for="group in componentList" :key="group.title" class="cell-group">
-            <div class="cell-group_tt">
-              {{ group.title }}
-            </div>
-            <div class="cell-group_bd">
-              <draggable
-                :list="group.list"
-                ghost-class="ghost"
-                :clone="cloneWidget"
-                :options="{group:{name: 'page',pull:'clone',put:false},sort: false}"
-                @start="startAdd"
-                @end="endAdd"
-              >
-                <div v-for="item in group.list" :key="item.label" class="cell">
-                  {{ item.label }}
+          <el-tabs type="card" value="1">
+            <el-tab-pane label="组件列表" name="1">
+              <div v-for="group in componentList" :key="group.title" class="cell-group">
+                <div class="cell-group_tt">
+                  {{ group.title }}
                 </div>
-              </draggable>
-            </div>
-          </div>
+                <div class="cell-group_bd">
+                  <draggable
+                    :list="group.list"
+                    ghost-class="ghost"
+                    :clone="cloneWidget"
+                    :options="{group:{name: 'page',pull:'clone',put:false},sort: false}"
+                    @start="startAdd"
+                    @end="endAdd"
+                  >
+                    <div v-for="item in group.list" :key="item.label" class="cell">
+                      {{ item.label }}
+                    </div>
+                  </draggable>
+                </div>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="结构树" name="2">
+              <widgetTree v-if="page" :list="page.children" />
+            </el-tab-pane>
+          </el-tabs>
         </div>
         <div class="page_mn main">
           <div class="device-config">
@@ -55,7 +62,7 @@
             </el-button>
           </div>
           <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
-            <nestedDraggable :list="page.children" :root="true" :disabled="false" />
+            <rootContainer :list="page.children" :root="true" :disabled="false" />
 
             <!--            <div class="mobile_content">-->
             <!--              <draggable-->
@@ -131,20 +138,20 @@ import hotkeys from 'hotkeys-js'
 import './core/registerComponent'
 
 import abstractContainer from './components/abstractContainer'
-import commonConfig from '@/views/editor/components/commonConfig'
-import pageConfig from '@/views/editor/components/pageConfig'
+import commonConfig from './common/commonConfig'
+import pageConfig from './common/pageConfig'
 
 import { componentList, Page } from './core/widget'
 
-import nestedDraggable from './components/rootContainer'
-import eventBus, { ACTION_RECORD } from '@/views/editor/core/eventBus'
+import rootContainer from './common/rootContainer'
+import widgetTree from './common/widgetTree'
+import eventBus, { ACTION_RECORD } from './core/eventBus'
 
 export default {
   name: 'Editor',
-  components: { nestedDraggable, VJsoneditor, draggable, abstractContainer, commonConfig, pageConfig },
+  components: { widgetTree, rootContainer, VJsoneditor, draggable, abstractContainer, commonConfig, pageConfig },
   data() {
     return {
-      componentList,
       page: null,
       isFixedMode: true,
       isDraggable: true,
@@ -158,6 +165,15 @@ export default {
     },
     currentComponent() {
       return this.$store.state.editor.currentComponent
+    },
+    componentList() {
+      const list = [...componentList]
+      list.push({
+        title: '用户组件',
+        list: this.$store.state.widget.widgetList
+      })
+
+      return list
     },
     normalChildren() {
       return this.page.children.filter(item => item.config && item.config.style.position !== 'fixed')
@@ -203,6 +219,7 @@ export default {
     this.initPage()
     this.initShortcut()
     this.initEventBus()
+    this.$store.dispatch('widget/getWidgetList')
   },
   methods: {
     initEventBus() {
@@ -235,6 +252,8 @@ export default {
         })
       }
     },
+
+    // 历史操作
     recordAction() {
       this.$store.dispatch('editor/recordAction', this.page)
     },
@@ -252,6 +271,7 @@ export default {
         }
       })
     },
+
     // 页面交互
     startAdd() {
       this.$store.commit('editor/setAddStatus', true)
@@ -260,6 +280,9 @@ export default {
       this.$store.commit('editor/setAddStatus', false)
     },
     cloneWidget(Widget) {
+      if (Widget.custom) {
+        return Widget.create()
+      }
       return new Widget()
     },
     savePage() {

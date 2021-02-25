@@ -1,5 +1,5 @@
 <script>
-import resizeContainer from './resize'
+import resizeContainer from '../common/resize'
 // import customImage from './customImage'
 // import useDrag from '@/hooks/useDrag'
 

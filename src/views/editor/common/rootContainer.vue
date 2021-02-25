@@ -2,7 +2,7 @@
   <customContainer :list="list" :root="true" :disabled="false" />
 </template>
 <script>
-import customContainer from './customContainer/index'
+import customContainer from '../components/customContainer/index'
 
 export default {
   name: 'RootContainer',
