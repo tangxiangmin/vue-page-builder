@@ -128,6 +128,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.app-container {
+  padding: 10px;
+}
 .qr-popover {
   &_bd {
     width: 100%;

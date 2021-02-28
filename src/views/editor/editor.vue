@@ -1,119 +1,117 @@
 <template>
-  <div v-if="page">
-    <div class=" page">
-      <div class="page_hd">
-        <el-button type="primary" @click="savePage">
-          保存页面
-        </el-button>
-        <el-popover
-          placement="top-start"
-          trigger="hover"
-          title="快捷方式"
-          class="shortcut-tip"
-        >
-          <i slot="reference" class="el-icon-warning-outline" />
-          <div class="shortcut">
-            <div v-for="item in shortcutList" :key="item.key" class="shortcut_item">
-              <strong>{{ item.key }} </strong> : {{ item.desc }}
-            </div>
-            <div class="shortcut_item">
-              <strong>鼠标右键选中</strong>： 复制和删除
-            </div>
+  <div v-if="page" class=" page">
+    <div class="page_hd">
+      <el-button type="primary" @click="savePage">
+        保存页面
+      </el-button>
+      <el-popover
+        placement="top-start"
+        trigger="hover"
+        title="快捷方式"
+        class="shortcut-tip"
+      >
+        <i slot="reference" class="el-icon-warning-outline" />
+        <div class="shortcut">
+          <div v-for="item in shortcutList" :key="item.key" class="shortcut_item">
+            <strong>{{ item.key }} </strong> : {{ item.desc }}
           </div>
-          <div />
-        </el-popover>
+          <div class="shortcut_item">
+            <strong>鼠标右键选中</strong>： 复制和删除
+          </div>
+        </div>
+        <div />
+      </el-popover>
+    </div>
+    <div class="page_bd">
+      <div class="page_sd side">
+        <el-tabs type="card" value="1">
+          <el-tab-pane label="组件列表" name="1">
+            <div v-for="group in componentList" :key="group.title" class="cell-group">
+              <div class="cell-group_tt">
+                {{ group.title }}
+              </div>
+              <div class="cell-group_bd">
+                <draggable
+                  :list="group.list"
+                  ghost-class="ghost"
+                  :clone="cloneWidget"
+                  :options="{group:{name: 'page',pull:'clone',put:false},sort: false}"
+                  @start="startAdd"
+                  @end="endAdd"
+                >
+                  <div v-for="item in group.list" :key="item.label" class="cell">
+                    {{ item.label }}
+                  </div>
+                </draggable>
+              </div>
+            </div>
+          </el-tab-pane>
+          <el-tab-pane label="结构树" name="2">
+            <widgetTree v-if="page" :list="page.children" />
+          </el-tab-pane>
+        </el-tabs>
       </div>
-      <div class="page_bd">
-        <div class="page_sd side">
-          <el-tabs type="card" value="1">
-            <el-tab-pane label="组件列表" name="1">
-              <div v-for="group in componentList" :key="group.title" class="cell-group">
-                <div class="cell-group_tt">
-                  {{ group.title }}
-                </div>
-                <div class="cell-group_bd">
-                  <draggable
-                    :list="group.list"
-                    ghost-class="ghost"
-                    :clone="cloneWidget"
-                    :options="{group:{name: 'page',pull:'clone',put:false},sort: false}"
-                    @start="startAdd"
-                    @end="endAdd"
-                  >
-                    <div v-for="item in group.list" :key="item.label" class="cell">
-                      {{ item.label }}
-                    </div>
-                  </draggable>
-                </div>
-              </div>
-            </el-tab-pane>
-            <el-tab-pane label="结构树" name="2">
-              <widgetTree v-if="page" :list="page.children" />
-            </el-tab-pane>
-          </el-tabs>
+      <div class="page_mn main">
+        <div class="device-config">
+          <el-button @click="isDraggable =!isDraggable">
+            {{ isDraggable ? '禁止拖放' : '开启拖放' }}
+          </el-button>
+          <el-button @click="isFixedMode =!isFixedMode">
+            {{ isFixedMode ? '固定模式' : '滚动模式' }}
+          </el-button>
         </div>
-        <div class="page_mn main">
-          <div class="device-config">
-            <el-button @click="isDraggable =!isDraggable">
-              {{ isDraggable ? '禁止拖放' : '开启拖放' }}
-            </el-button>
-            <el-button @click="isFixedMode =!isFixedMode">
-              {{ isFixedMode ? '固定模式' : '滚动模式' }}
-            </el-button>
-          </div>
-          <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
-            <rootContainer :list="page.children" :root="true" :disabled="false" />
+        <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
+          <rootContainer :list="page.children" :root="true" :disabled="false" />
 
-            <!--            <div class="mobile_content">-->
-            <!--              <draggable-->
-            <!--                :options="{group:{name: 'page', pull: 'clone'}, disabled: !isDraggable}"-->
-            <!--                :list=" page.children"-->
-            <!--                class="widget-list"-->
-            <!--                ghost-class="ghost"-->
-            <!--              >-->
-            <!--                <abstractContainer-->
-            <!--                  v-for="(item, index) in normalChildren"-->
-            <!--                  :key="index"-->
-            <!--                  class="widget"-->
-            <!--                  :class="{'widget-selected': currentComponent === item}"-->
-            <!--                  :is-active=" currentComponent === item"-->
-            <!--                  :widget="item"-->
-            <!--                />-->
-            <!--              </draggable>-->
-            <!--            </div>-->
-            <!--            &lt;!&ndash;模拟fixed&ndash;&gt;-->
-            <!--            <abstractContainer-->
-            <!--              v-for="(item, index) in fixedChildren"-->
-            <!--              :key="index"-->
-            <!--              :widget="item"-->
-            <!--              :class="{'widget-selected': currentComponent === item}"-->
-            <!--              :is-active=" currentComponent === item"-->
-            <!--            />-->
-          </div>
+          <!--            <div class="mobile_content">-->
+          <!--              <draggable-->
+          <!--                :options="{group:{name: 'page', pull: 'clone'}, disabled: !isDraggable}"-->
+          <!--                :list=" page.children"-->
+          <!--                class="widget-list"-->
+          <!--                ghost-class="ghost"-->
+          <!--              >-->
+          <!--                <abstractContainer-->
+          <!--                  v-for="(item, index) in normalChildren"-->
+          <!--                  :key="index"-->
+          <!--                  class="widget"-->
+          <!--                  :class="{'widget-selected': currentComponent === item}"-->
+          <!--                  :is-active=" currentComponent === item"-->
+          <!--                  :widget="item"-->
+          <!--                />-->
+          <!--              </draggable>-->
+          <!--            </div>-->
+          <!--            &lt;!&ndash;模拟fixed&ndash;&gt;-->
+          <!--            <abstractContainer-->
+          <!--              v-for="(item, index) in fixedChildren"-->
+          <!--              :key="index"-->
+          <!--              :widget="item"-->
+          <!--              :class="{'widget-selected': currentComponent === item}"-->
+          <!--              :is-active=" currentComponent === item"-->
+          <!--            />-->
         </div>
-        <div class="page_config config">
-          <el-tabs type="card" value="1">
-            <el-tab-pane label="控件配置项" name="1">
-              <div v-if="currentComponent" :key="currentComponent.id">
-                <el-form label-width="80px">
-                  <el-alert title="控件配置" style="margin-bottom: 10px" :closable="false" />
-                  <component :is="currentComponent.configType" :config="currentComponent.config" />
+      </div>
+      <div class="page_config config">
+        <el-tabs type="card" value="1">
+          <el-tab-pane label="控件配置项" name="1">
+            <div v-if="currentComponent" :key="currentComponent.id">
+              <el-form label-width="100px">
+                <el-alert title="控件配置" style="margin-bottom: 10px" :closable="false" />
+                <component :is="currentComponent.configType" :config="currentComponent.config" />
 
-                  <commonConfig :config="currentComponent.config" />
-                </el-form>
-              </div>
-              <template v-else>
-                <div>请选择一个控件</div>
-              </template>
-            </el-tab-pane>
-            <el-tab-pane label="页面配置项" name="2">
-              <pageConfig :page="page" />
-            </el-tab-pane>
-            <el-tab-pane label="JSON" name="3">
-              <v-jsoneditor :key="Math.random()" :value="page" :plus="false" height="60vh" />
-            </el-tab-pane>
-          </el-tabs>
-        </div>
+                <commonConfig :config="currentComponent.config" />
+              </el-form>
+            </div>
+            <template v-else>
+              <div>请选择一个控件</div>
+            </template>
+          </el-tab-pane>
+          <el-tab-pane label="页面配置项" name="2">
+            <pageConfig :page="page" />
+          </el-tab-pane>
+          <el-tab-pane label="JSON" name="3">
+            <v-jsoneditor :key="Math.random()" :value="page" :plus="false" height="60vh" />
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
     <el-dialog :visible.sync="dialogSaveVisible" title="保存课程">
@@ -169,7 +167,7 @@ export default {
     componentList() {
       const list = [...componentList]
       list.push({
-        title: '用户组件',
+        title: '用户UI组件',
         list: this.$store.state.widget.widgetList
       })
 
@@ -355,7 +353,12 @@ export default {
 }
 
 .page {
+  height: 100vh;
+  box-sizing: border-box;
+  $header-height: 61px;
   &_hd {
+    height: $header-height;
+    box-sizing: border-box;
     padding: 10px 20px;
     border-bottom: 1px solid #dedede;
   }
@@ -363,7 +366,7 @@ export default {
   &_bd {
     display: flex;
     align-items: flex-start;
-    height: calc(100vh);
+    height: calc(100vh - #{$header-height});
   }
 
   &_sd {

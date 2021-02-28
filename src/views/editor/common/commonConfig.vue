@@ -8,7 +8,7 @@
       <codeEditor v-model="config.style" />
     </el-form-item>
 
-    <el-form-item label="上传">
+    <el-form-item v-if="isContainer" label="上传">
       <el-button @click="uploadWidget">
         上传自定义组件
       </el-button>
@@ -32,9 +32,10 @@ export default {
   computed: {
     currentComponent() {
       return this.$store.state.editor.currentComponent
+    },
+    isContainer() {
+      return this.currentComponent && this.currentComponent.type === 'CustomContainer'
     }
-  },
-  created() {
   },
   methods: {
     async uploadWidget() {
