@@ -10,6 +10,9 @@
         </el-radio>
       </el-radio-group>
     </el-form-item>
+    <el-form-item label="数据源">
+      <el-input v-model="page.data" />
+    </el-form-item>
     <el-form-item label="页面样式">
       <el-input v-model="page.style" type="textarea" :autosize="{minRows:5}" />
     </el-form-item>

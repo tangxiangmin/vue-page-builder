@@ -62,6 +62,9 @@ export class Page extends BaseWidget {
     this.type = 'pure'
     this.config = {}
     this.children = []
+    // 页面数据源
+    // todo remove test
+    this.data = JSON.stringify({ 'msg': 'hello world' })
   }
 
   initFromJSON(json) {
