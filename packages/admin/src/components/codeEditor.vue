@@ -20,6 +20,7 @@ import 'codemirror/mode/python/python'
 import 'codemirror/mode/css/css'
 import 'codemirror/addon/lint/lint'
 import 'codemirror/addon/hint/show-hint'
+import 'codemirror/addon/hint/css-hint'
 import 'codemirror/addon/edit/closebrackets'
 
 // import pythonHint from './codemirror/python-hint'
@@ -48,7 +49,7 @@ export default {
     },
     mode: {
       type: String,
-      default: 'css'
+      default: 'text/css'
     },
     editorOptions: {
       type: Object,
@@ -100,6 +101,10 @@ export default {
       this.codeEditor.on('change', () => {
         // 实现v-model
         this.$emit('input', this.codeEditor.getValue())
+      })
+      // 代码提示
+      this.codeEditor.on('cursorActivity', () => {
+        this.codeEditor.showHint()
       })
     }
   }

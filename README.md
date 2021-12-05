@@ -3,17 +3,22 @@
 页面编辑器
 ===
 
+## 目标
 
-## 步骤
+做一个完全不需要写代码的活动页面生成器
 
-编辑器
+## 开发环境
+
+整个项目使用learn + yarn workspace 搭建monorepo
+
+编辑器, vue + ElementUI
 ```
 npm i 
 
 npm run dev
 ```
 
-后台项目
+后台项目, eggjs + MySQL
 ```
 cd server
 
@@ -22,12 +27,16 @@ npm i
 // 初始化表，需要先配置好数据库连接
 npx sequelize db:migrate
 
-npm tun dev
+npm run dev
 ```
 
-预览项目
+预览项目, vite + vue3
 ```
-// todo
+cd client
+
+npm i 
+
+npm run dev
 ```
 
 ## Feature

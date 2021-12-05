@@ -61,7 +61,8 @@
           </el-button>
         </div>
         <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
-          <rootContainer :list="page.children" :root="true" :disabled="false" />
+          <previewIframe :page-data="page" />
+          <!--          <rootContainer :list="page.children" :root="true" :disabled="false" />-->
 
           <!--            <div class="mobile_content">-->
           <!--              <draggable-->
@@ -138,6 +139,7 @@ import './core/registerComponent'
 import abstractContainer from './components/abstractContainer'
 import commonConfig from './common/commonConfig'
 import pageConfig from './common/pageConfig'
+import previewIframe from './previewIframe'
 
 import { componentList, Page } from './core/widget'
 
@@ -147,7 +149,7 @@ import eventBus, { ACTION_RECORD } from './core/eventBus'
 
 export default {
   name: 'Editor',
-  components: { widgetTree, rootContainer, VJsoneditor, draggable, abstractContainer, commonConfig, pageConfig },
+  components: { previewIframe, widgetTree, rootContainer, VJsoneditor, draggable, abstractContainer, commonConfig, pageConfig },
   data() {
     return {
       page: null,
