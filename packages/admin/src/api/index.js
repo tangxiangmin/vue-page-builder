@@ -25,6 +25,12 @@ export function getPageDetail(id) {
 export function addWidget(data) {
   return request.post('/api/widget', data)
 }
+export function removeWidget(id) {
+  return request.delete(`/api/widget/${id}`)
+}
+export function editWidget(data) {
+  return request.put(`/api/widget/${data.id}`, data)
+}
 
 export function getWidgetList(params) {
   return request.get(`/api/widget`, { params })

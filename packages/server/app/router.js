@@ -8,5 +8,6 @@ module.exports = app => {
 
   router.resources('/api/page/', controller.page);
   router.resources('/api/widget/', controller.widget);
+  router.get('/api/widget/file/:id', controller.widget.findWidgetByFileId);
 
 };

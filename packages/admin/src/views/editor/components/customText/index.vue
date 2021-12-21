@@ -1,5 +1,5 @@
 <template>
-  <span>{{ config.content }}</span>
+  <span contenteditable="true" @input="onTextChange">{{ config.content }}</span>
 </template>
 
 <script>
@@ -9,6 +9,11 @@ export default {
     config: {
       type: Object,
       default: null
+    }
+  },
+  methods: {
+    onTextChange(e) {
+      this.config.content = e.target.innerText
     }
   }
 }

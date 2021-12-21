@@ -8421,6 +8421,15 @@ from@~0:
   resolved "https://registry.nlark.com/from/download/from-0.1.7.tgz#83c60afc58b9c56997007ed1a768b3ab303a44fe"
   integrity sha1-g8YK/Fi5xWmXAH7Rp2izqzA6RP4=
 
+fs-extra@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npmjs.org/fs-extra/-/fs-extra-10.0.0.tgz#9ff61b655dde53fb34a82df84bb214ce802e17c1"
+  integrity sha512-C5owb14u9eJwizKGdchcDUQeFtlSHHthBk8pbX9Vc1PFZrLombudjDnNns88aYslCyF6IY5SUw3Roz6xShcEIQ==
+  dependencies:
+    graceful-fs "^4.2.0"
+    jsonfile "^6.0.1"
+    universalify "^2.0.0"
+
 fs-extra@^7.0.1:
   version "7.0.1"
   resolved "https://registry.nlark.com/fs-extra/download/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
@@ -16168,6 +16177,14 @@ verror@1.10.0:
     assert-plus "^1.0.0"
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
+
+vite-plugin-remote-module@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/vite-plugin-remote-module/-/vite-plugin-remote-module-1.0.2.tgz#43844dd214bc7a47cc720d1645a33456dd6b8bef"
+  integrity sha512-A9ptPXXfxM0hxvpHZDlAl+RYat2hkCqj3LfOOIWliMyCh+beWUS6ds/FKzrZiknSf9KvOxbuchipwBC1Kev5lQ==
+  dependencies:
+    fs-extra "^10.0.0"
+    request "^2.88.2"
 
 vite@^2.6.4:
   version "2.6.14"

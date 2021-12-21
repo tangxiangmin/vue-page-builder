@@ -1,9 +1,11 @@
 <template>
-  <div>{{ config }}</div>
+  <div>
+    用户端直接预览
+  </div>
 </template>
 
-<script >
-import { onMounted, ref } from 'vue'
+<script>
+import {onMounted, ref} from 'vue'
 import {PreviewMessage} from '@shymean/page-builder-shared'
 
 export default {
@@ -13,15 +15,14 @@ export default {
     onMounted(() => {
       const previewInstance = new PreviewMessage(null, document.referrer)
       // 接收一段页面JSON并预览
-      console.log('done')
       previewInstance.on('updatePage', data => {
-        console.log(123123)
+        console.log(data)
         config.value = data
       })
 
       previewInstance.emit('ready')
     })
-    return { config }
+    return {config}
   }
 }
 </script>

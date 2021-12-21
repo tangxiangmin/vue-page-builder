@@ -10,7 +10,11 @@ export default createRouter({
     },
     {
       path: '/preview',
-      component: () => import('../views/preview.vue')
+      component: () => import('../views/preview/index.vue')
+    },
+    {
+      path: '/test',
+      component: () => import('../views/preview/test.vue')
     }
   ]
 })

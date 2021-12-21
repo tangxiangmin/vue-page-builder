@@ -61,34 +61,8 @@
           </el-button>
         </div>
         <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
-          <previewIframe :page-data="page" />
-          <!--          <rootContainer :list="page.children" :root="true" :disabled="false" />-->
-
-          <!--            <div class="mobile_content">-->
-          <!--              <draggable-->
-          <!--                :options="{group:{name: 'page', pull: 'clone'}, disabled: !isDraggable}"-->
-          <!--                :list=" page.children"-->
-          <!--                class="widget-list"-->
-          <!--                ghost-class="ghost"-->
-          <!--              >-->
-          <!--                <abstractContainer-->
-          <!--                  v-for="(item, index) in normalChildren"-->
-          <!--                  :key="index"-->
-          <!--                  class="widget"-->
-          <!--                  :class="{'widget-selected': currentComponent === item}"-->
-          <!--                  :is-active=" currentComponent === item"-->
-          <!--                  :widget="item"-->
-          <!--                />-->
-          <!--              </draggable>-->
-          <!--            </div>-->
-          <!--            &lt;!&ndash;模拟fixed&ndash;&gt;-->
-          <!--            <abstractContainer-->
-          <!--              v-for="(item, index) in fixedChildren"-->
-          <!--              :key="index"-->
-          <!--              :widget="item"-->
-          <!--              :class="{'widget-selected': currentComponent === item}"-->
-          <!--              :is-active=" currentComponent === item"-->
-          <!--            />-->
+          <!--          <previewIframe :page-data="page" />-->
+          <rootContainer :list="page.children" :root="true" :disabled="false" />
         </div>
       </div>
       <div class="page_config config">
