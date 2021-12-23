@@ -1,10 +1,14 @@
 <template>
-<div>hello world123123</div>
+<div>hello world {{msg}}</div>
 </template>
 
 <script>
 export default {
-  name: "index.vue"
+  name: "index.vue",
+props:{
+msg:{type:String,defualt:''}
+}
+
 }
 </script>
 

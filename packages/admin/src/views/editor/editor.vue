@@ -61,8 +61,8 @@
           </el-button>
         </div>
         <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
-          <!--          <previewIframe :page-data="page" />-->
-          <rootContainer :list="page.children" :root="true" :disabled="false" />
+          <previewIframe :page-data="page" />
+          <!--          <rootContainer :list="page.children" :root="true" :disabled="false" />-->
         </div>
       </div>
       <div class="page_config config">

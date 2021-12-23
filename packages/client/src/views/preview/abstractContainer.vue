@@ -1,5 +1,10 @@
+<template>
+  <component :is="compRef" v-bind="config.props"></component>
+</template>
 <script>
-import {h} from 'vue'
+import {h, shallowRef} from 'vue'
+import {loadRemoteComponent} from '@vite-plugin-remote-module';
+
 
 export default {
   name: "abstractContainer",
@@ -11,29 +16,41 @@ export default {
   },
   setup(props) {
     const {config} = props
-    console.log(config)
+    const compRef = shallowRef(config.type)
 
-    function renderChildren(node) {
-      if (!node) return []
-      const {children} = node
-
-      if (!Array.isArray(children)) return children
-
-      return children.map(child => {
-        if (typeof child === 'string' || !child) return child
-        const {type, props} = child
-        return h(type, props, renderChildren(child))
+    if (config.remote) {
+      compRef.value = null
+      const {url} = config.remote
+      loadRemoteComponent(url).then(val => {
+        compRef.value = val
       })
     }
 
-    function render(node) {
-      const {type, props} = node
-      return h(type, props, renderChildren(node))
+    // function renderChildren(node) {
+    //   if (!node) return []
+    //   const {children} = node
+    //
+    //   if (!Array.isArray(children)) return children
+    //
+    //   return children.map(child => {
+    //     if (typeof child === 'string' || !child) return child
+    //     const {type, props} = child
+    //     return h(type, props, renderChildren(child))
+    //   })
+    // }
+    //
+    // function render(node) {
+    //   const {type, props} = node
+    //   return h(type, props, renderChildren(node))
+    // }
+    return {
+      config,
+      compRef
     }
-
-    return () => {
-      return render(config)
-    }
+    //
+    // return () => {
+    //   return render(config)
+    // }
   }
 }
 </script>
