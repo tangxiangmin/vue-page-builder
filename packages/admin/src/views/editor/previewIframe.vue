@@ -73,7 +73,6 @@ export default {
       const { previewIframe } = this.$refs
       const previewInstance = new PreviewMessage(previewIframe, this.previewHost)
       this.previewInstance = previewInstance
-      console.log(1232)
 
       // 页面准备完毕，开始渲染
       previewInstance.on('ready', () => {

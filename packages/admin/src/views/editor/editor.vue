@@ -61,8 +61,8 @@
           </el-button>
         </div>
         <div class="mobile" :class="{'mobile-fixed': isFixedMode}" :style="page.style">
+          <rootContainer :list="page.children" :root="true" :disabled="false" />
           <previewIframe :page-data="page" />
-          <!--          <rootContainer :list="page.children" :root="true" :disabled="false" />-->
         </div>
       </div>
       <div class="page_config config">
@@ -89,7 +89,7 @@
         </el-tabs>
       </div>
     </div>
-    <el-dialog :visible.sync="dialogSaveVisible" title="保存课程">
+    <el-dialog :visible.sync="dialogSaveVisible" title="保存数据">
       <v-jsoneditor v-model="pageJSON" :plus="false" height="60vh" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogSaveVisible = false">
@@ -123,7 +123,16 @@ import eventBus, { ACTION_RECORD } from './core/eventBus'
 
 export default {
   name: 'Editor',
-  components: { previewIframe, widgetTree, rootContainer, VJsoneditor, draggable, abstractContainer, commonConfig, pageConfig },
+  components: {
+    previewIframe,
+    widgetTree,
+    rootContainer,
+    VJsoneditor,
+    draggable,
+    abstractContainer,
+    commonConfig,
+    pageConfig
+  },
   data() {
     return {
       page: null,
@@ -142,9 +151,10 @@ export default {
     },
     componentList() {
       const list = [...componentList]
+      const { widgetList } = this.$store.state.widget
       list.push({
-        title: '用户UI组件',
-        list: this.$store.state.widget.widgetList
+        title: '自定义组件',
+        list: widgetList
       })
 
       return list
@@ -332,6 +342,7 @@ export default {
   height: 100vh;
   box-sizing: border-box;
   $header-height: 61px;
+
   &_hd {
     height: $header-height;
     box-sizing: border-box;

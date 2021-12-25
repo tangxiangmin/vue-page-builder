@@ -1,59 +1,79 @@
 import BaseWidget from './baseWidget'
 
 export class ImageWidget extends BaseWidget {
-    static label = '图片'
+  static label = '图片'
 
-    constructor() {
-      super()
-      this.name = ImageWidget.label
+  constructor() {
+    super()
+    this.name = ImageWidget.label
 
-      this.type = 'CustomImage'
-      this.configType = 'CustomImageConfig'
+    this.type = 'CustomImage'
+    this.configType = 'CustomImageConfig'
+  }
+
+  getConfig() {
+    return {
+      src: require('@/assets/logo.png'),
+      style: ''
     }
-
-    getConfig() {
-      return {
-        src: require('@/assets/logo.png'),
-        style: ''
-      }
-    }
+  }
 }
 
 export class ContainerWidget extends BaseWidget {
-    static label = '容器'
+  static label = '容器'
 
-    constructor() {
-      super()
-      this.name = ContainerWidget.label
-      this.type = 'CustomContainer'
-      this.configType = 'CustomContainerConfig'
-    }
+  constructor() {
+    super()
+    this.name = ContainerWidget.label
+    this.type = 'CustomContainer'
+    this.configType = 'CustomContainerConfig'
+  }
 
-    getConfig() {
-      return {
-        nested: false,
-        style: 'height:100px;\nbackground:#ccc;'
-      }
+  getConfig() {
+    return {
+      nested: false,
+      style: 'height:100px;\nbackground:#ccc;'
     }
+  }
 }
 
 export class TextWidget extends BaseWidget {
-    static label = '文字'
+  static label = '文字'
 
-    constructor(props) {
-      super(props)
-      this.name = TextWidget.label
-      this.type = 'CustomText'
-      this.configType = 'CustomTextConfig'
-    }
+  constructor(props) {
+    super(props)
+    this.name = TextWidget.label
+    this.type = 'CustomText'
+    this.configType = 'CustomTextConfig'
+  }
 
-    getConfig() {
-      return {
-        content: 'hello',
-        absolute: true,
-        style: ''
-      }
+  getConfig() {
+    return {
+      content: 'hello',
+      absolute: true,
+      style: ''
     }
+  }
+}
+
+export class RemoteWidget extends BaseWidget {
+  static label = '远程模块'
+
+  constructor(props) {
+    super(props)
+    this.name = RemoteWidget.label
+    this.type = 'RemoteWidget'
+    this.configType = 'RemoteWidgetConfig'
+    this.children = []
+    this.config.url = props.url
+  }
+
+  getConfig() {
+    return {
+      url: '',
+      props: ''
+    }
+  }
 }
 
 export class Page extends BaseWidget {
@@ -89,6 +109,17 @@ export function createWidgetFromTemplate(template) {
       const widget = new ContainerWidget()
       widget.initFromJSON(content)
       return widget
+    }
+  }
+}
+
+export function createWidgetFromRemote(config) {
+  const { name, url } = config
+  return {
+    label: name,
+    custom: true,
+    create() {
+      return new RemoteWidget({ url })
     }
   }
 }

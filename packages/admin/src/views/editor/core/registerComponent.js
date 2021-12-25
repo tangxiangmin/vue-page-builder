@@ -32,7 +32,7 @@ function createRegisterComponent(specialConfig = {}) {
 }
 
 // 移动端预览组件
-const componentList = ['customImage', 'customContainer', 'customText']
+const componentList = ['customImage', 'customContainer', 'customText', 'remoteWidget']
 
 componentList.forEach(createRegisterComponent({
   // 'CustomContainer': {

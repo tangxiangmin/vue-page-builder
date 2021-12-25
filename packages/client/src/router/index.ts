@@ -13,6 +13,10 @@ export default createRouter({
       component: () => import('../views/preview/index.vue')
     },
     {
+      path: '/template',
+      component: () => import('../views/template/index.vue')
+    },
+    {
       path: '/test',
       component: () => import('../views/preview/test.vue')
     }
