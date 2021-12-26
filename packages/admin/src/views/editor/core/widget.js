@@ -13,7 +13,7 @@ export class ImageWidget extends BaseWidget {
 
   getConfig() {
     return {
-      src: require('@/assets/logo.png'),
+      src: location.protocol + '//' + location.host + require('@/assets/logo.png'),
       style: ''
     }
   }
@@ -50,7 +50,6 @@ export class TextWidget extends BaseWidget {
   getConfig() {
     return {
       content: 'hello',
-      absolute: true,
       style: ''
     }
   }
@@ -59,7 +58,7 @@ export class TextWidget extends BaseWidget {
 export class RemoteWidget extends BaseWidget {
   static label = '远程模块'
 
-  constructor(props) {
+  constructor(props = {}) {
     super(props)
     this.name = RemoteWidget.label
     this.type = 'RemoteWidget'
@@ -125,7 +124,7 @@ export function createWidgetFromRemote(config) {
 }
 
 export const componentList = [
-  { title: '基础控件', list: [ImageWidget, ContainerWidget, TextWidget] }
+  { title: '基础控件', list: [ImageWidget, ContainerWidget, TextWidget, RemoteWidget] }
   // { title: '自定义控件', list: [{ label: '选项卡' }] },
   // { title: '高阶控件', list: [{ label: '数据源' }] }
 ]

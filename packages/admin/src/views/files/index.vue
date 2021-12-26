@@ -11,7 +11,7 @@
           <el-input v-model="form.name" />
         </el-form-item>
         <el-form-item label="内容">
-          <el-input v-model="form.content" type="textarea" :autosize="{minRows:10}" />
+          <codeEditor v-model="form.content" mode="text/html" />
         </el-form-item>
       </template>
     </curdTemplate>
@@ -20,11 +20,12 @@
 
 <script>
 import curdTemplate from '@/components/curdTemplate'
+import codeEditor from '@/components/codeEditor'
 import { addWidget, getWidgetList, removeWidget, editWidget } from '@/api'
 
 export default {
   name: 'IndexVue',
-  components: { curdTemplate },
+  components: { curdTemplate, codeEditor },
   data() {
     return {
       searchParams: {},

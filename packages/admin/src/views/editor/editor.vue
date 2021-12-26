@@ -1,5 +1,5 @@
 <template>
-  <div v-if="page" class=" page">
+  <div v-if="page" class="page">
     <div class="page_hd">
       <el-button type="primary" @click="savePage">
         保存页面
@@ -153,7 +153,7 @@ export default {
       const list = [...componentList]
       const { widgetList } = this.$store.state.widget
       list.push({
-        title: '自定义组件',
+        title: '远程组件',
         list: widgetList
       })
 

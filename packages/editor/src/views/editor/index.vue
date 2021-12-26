@@ -1,12 +1,10 @@
 <template>
-  <div style="height: 100px;">
-    远程模块
-  </div>
+<div></div>
 </template>
 
 <script>
 export default {
-  name: 'RemoteWidget'
+  name: "index"
 }
 </script>
 

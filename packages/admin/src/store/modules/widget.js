@@ -1,5 +1,5 @@
 import { getWidgetList } from '@/api'
-import { createWidgetFromTemplate, createWidgetFromRemote } from '@/views/editor/core/widget'
+import { createWidgetFromRemote } from '@/views/editor/core/widget'
 
 export default {
   namespaced: true,
