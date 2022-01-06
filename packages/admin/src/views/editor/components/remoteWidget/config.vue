@@ -17,10 +17,6 @@ export default {
       type: Object,
       default: null
     }
-  },
-  setup(props) {
-    // todo 解析组件内容，获取props等内容
-    console.log(props)
   }
 }
 </script>

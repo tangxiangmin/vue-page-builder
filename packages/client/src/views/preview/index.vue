@@ -1,6 +1,5 @@
 <template>
   <div>
-    用户端直接预览123123213
     <abstractContainer :config="comp" v-for="comp in config.children" :key="comp.id"></abstractContainer>
   </div>
 </template>

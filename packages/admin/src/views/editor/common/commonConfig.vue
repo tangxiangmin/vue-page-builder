@@ -19,6 +19,7 @@
 <script>
 import codeEditor from '@/components/codeEditor'
 import { addWidget } from '@/api'
+import json2sfc from '../core/json2sfc'
 
 export default {
   name: 'CommonConfig',
@@ -42,10 +43,12 @@ export default {
       const { value } = await this.$prompt('请输入组件名称')
       if (!value) return
 
+      // todo 将JSON转换为sfc
       const params = {
         name: value,
-        content: JSON.stringify(this.currentComponent)
+        content: json2sfc(this.currentComponent)
       }
+
       await addWidget(params)
       this.$message.success('上传成功')
     }
