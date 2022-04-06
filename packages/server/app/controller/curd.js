@@ -31,7 +31,7 @@ class CURDController extends Controller {
   async show() {
     const { ctx } = this;
     const { id } = ctx.params;
-    ctx.body = await this.model.findOne({ id });
+    ctx.body = await this.model.findOne({ where: { id } });
   }
 
   // add one

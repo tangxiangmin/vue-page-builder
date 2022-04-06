@@ -1,31 +1,34 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory} from "vue-router";
 
-import widgetList from '../views/widgetList.vue'
-import editorPageList from '../views/pageList.vue'
-import editorWorkspace from '../views/editor/index.vue'
+const routes = [
+  {
+    path: "/",
+    redirect: '/editor/page_list'
+  },
+  {
+    path: '/editor/page_list',
+    name: 'editorPageList',
+    component: () => import('../views/pageEditor/pageList.vue')
+  },
+
+  {
+    path: '/editor/widget_list',
+    name: 'editorWidgetList',
+    component: () => import('../views/pageEditor/widgetList.vue')
+  },
+  {
+    path: '/editor/widget/:id',
+    name: 'editorWidgetDetail',
+    component: () => import('../views/pageEditor/widgetDetail.vue')
+  },
+  {
+    path: '/editor/workspace',
+    name: 'editorWorkspace',
+    component: () => import('../views/pageEditor/workspace.vue')
+  },
+]
 
 export default createRouter({
   history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      name: 'index',
-      redirect: '/editor/list'
-    },
-    {
-      path: '/widget/list',
-      name: 'widgetList',
-      component: widgetList
-    },
-    {
-      path: '/editor/list',
-      name: 'editorPageList',
-      component: editorPageList
-    },
-    {
-      path: '/editor/workspace',
-      name: 'editorWorkspace',
-      component: editorWorkspace
-    }
-  ]
+  routes
 })

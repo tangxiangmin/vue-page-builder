@@ -1,0 +1,5 @@
+packages:
+  - 'packages/client'
+  - 'packages/editor'
+  - 'packages/shared'
+  - 'packages/preview'

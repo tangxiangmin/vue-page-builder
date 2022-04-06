@@ -5,12 +5,5 @@
   "repository": "git@github.com:tangxiangmin/vue-page-builder.git",
   "author": "tangxiangmin <645234650@qq.com>",
   "license": "MIT",
-  "private": true,
-  "workspaces": {
-    "packages": [ "packages/*"],
-    "nohoist": [ "**/@vue/cli-plugin-eslint", "**/@vue/cli-plugin-eslint/**" ]
-  },
-  "devDependencies": {
-    "lerna": "^3.19.0"
-  }
+  "private": true
 }

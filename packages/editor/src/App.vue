@@ -1,19 +1,71 @@
+<template>
+  <div class="flex">
+    <div class="w-200px flex-shrink-0">
+      <el-menu :default-active="currentIndex" class="el-menu-vertical-demo h-100vh">
+        <template v-for="menu in menuList">
+
+          <el-sub-menu :index="menu.index" v-if="menu.children">
+            <template #title>
+              <span>{{ menu.title }}</span>
+            </template>
+            <el-menu-item :index="sub.index" v-for="sub in menu.children">
+              <router-link class="block w-200px" :to="sub.route">{{ sub.title }}</router-link>
+            </el-menu-item>
+          </el-sub-menu>
+          <el-menu-item :index="menu.index" v-else>
+            <router-link class="block w-200px" :to="menu.route">{{ menu.title }}</router-link>
+          </el-menu-item>
+        </template>
+
+      </el-menu>
+    </div>
+    <div class="main flex-grow p-20px">
+      <router-view></router-view>
+    </div>
+  </div>
+</template>
 <script setup lang="ts">
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
+
+import {useRoute} from "vue-router";
+import {computed} from "vue";
+
+type MenuItem = {
+  route?: { name: string },
+  title: string,
+  index: string,
+  children?: MenuItem[]
+}
+
+const menuList: MenuItem[] = [
+  {
+    title: '页面编辑器',
+    index: '2',
+    children: [
+      {
+        route: {name: 'editorPageList'},
+        title: '页面列表',
+        index: '2-1'
+      },
+      {
+        route: {name: 'editorWidgetList'},
+        title: '组件列表',
+        index: '2-2'
+      },
+    ]
+  },
+  // {
+  //   title: '问卷管理',
+  //   index: '3',
+  //   children: []
+  // },
+]
+const route = useRoute()
+
+const currentIndex = computed(() => {
+  const menu = menuList[0]?.children?.find(menu => menu?.route?.name === route.name)
+  return menu && menu.index
+  // return '2-1'
+})
 </script>
 
-<template>
-  <router-view></router-view>
-</template>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+<style></style>
