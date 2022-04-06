@@ -7,6 +7,7 @@ module.exports = app => {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     name: STRING(30),
     content: TEXT,
+    file: TEXT,
     createdAt: {
       type: DATE,
       filed: 'created_at',

@@ -1,4 +1,5 @@
-
+export default function json2sfc(vnode:string) {
+  return `
 <script>
 import {h, defineComponent} from 'vue'
 import RemoteWidget from "./remoteWidget.vue";
@@ -26,9 +27,11 @@ function render(node) {
   }
   const realType = simpleMap[type] || type
 
+
   return h(realType, config, {default: () => renderChildren(node)})
 }
 
+    
 export default defineComponent({
   name: "test",
   setup(){
@@ -36,12 +39,13 @@ export default defineComponent({
     }
   },
   render(){
-    const config = {"type":"pure","config":{},"children":[{"id":1614093161889,"name":"容器","type":"div","configType":"CustomContainerConfig","config":{"id":"","click":{"type":"","args":"","logType":"","logParams":""},"children":[],"nested":true,"style":{"height":"100px","background":"#dedede"}},"children":[{"id":1614093160506,"name":"文字","type":"CustomText","configType":"CustomTextConfig","config":{"id":"","click":{"type":"","args":"","logType":"","logParams":""},"content":"hello","style":{}},"children":[]}]},{"type":"RemoteWidget","name":"远程模块","id":1649253358185,"config":{"nested":false,"url":"http://localhost:7001/api/widget/file/7.vue","props":""},"children":[]}]}
+    const config = ${vnode}
      return render(config)
   }
 });
-</script>
+<\/script>
 
 <style scoped lang="scss">
 
-</style>
+<\/style>`
+}

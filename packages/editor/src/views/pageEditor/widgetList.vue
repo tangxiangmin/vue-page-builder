@@ -3,6 +3,7 @@
     <el-table-column label="id" prop="id" width="200"/>
     <el-table-column label="名称" prop="name"/>
     <el-table-column label="content" prop="content"/>
+    <el-table-column label="link" prop="link"/>
     <el-table-column label="操作">
       <template v-slot:default="{row}">
         <el-button size="small" @click="toEditPage(row)">编辑</el-button>
@@ -24,8 +25,11 @@ const router = useRouter()
 const widgetList = ref([])
 
 async function getList() {
-  const {data} = await getWidgetList({pageNum: 1, pageSize: 15})
-  widgetList.value = data.list
+  const {data:{list}} = await getWidgetList({pageNum: 1, pageSize: 15})
+  list.forEach(row=>{
+    row.link = `http://localhost:7001/api/widget/file/${row.id}.vue`
+  })
+  widgetList.value = list
 }
 
 onMounted(() => {

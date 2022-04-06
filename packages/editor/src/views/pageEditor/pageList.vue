@@ -14,6 +14,9 @@
         <el-button size="small" @click="remove(row)">
           删除
         </el-button>
+        <el-button size="small" @click="preview(row)">
+          预览
+        </el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -56,6 +59,10 @@ async function remove(row) {
   await removePage(row.id)
   ElMessage.success('删除成功')
   await fetchPageList()
+}
+
+function preview(row) {
+  window.open(row.link, '_blank')
 }
 
 </script>

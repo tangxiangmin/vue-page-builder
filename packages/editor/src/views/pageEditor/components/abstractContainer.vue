@@ -1,6 +1,3 @@
-<!--<template>-->
-<!--  <component :is="compRef" v-bind="config.props"></component>-->
-<!--</template>-->
 <script>
 import {h, shallowRef} from 'vue'
 
@@ -44,11 +41,6 @@ export default {
 
       return h(realType, config, {default: () => renderChildren(node)})
     }
-
-    // return {
-    //   config,
-    //   compRef
-    // }
 
     return () => {
       return render(config)
