@@ -8,13 +8,13 @@
     "serve": "vite preview"
   },
   "dependencies": {
-    "@shymean/page-builder-shared": "0.0.0",
     "axios": "^0.24.0",
     "fs-extra": "^10.0.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-cors": "^0.0.16",
     "koa-router": "^10.1.1",
+    "koa-static": "^5.0.0",
     "vue": "^3.2.16",
     "vue-router": "^4.0.12"
   },

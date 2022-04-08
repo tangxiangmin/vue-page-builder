@@ -40,7 +40,7 @@ function copyWidget(_: any, row: BaseWidget) {
 }
 
 function removeWidget(_: any, row: BaseWidget) {
-  const list = _.parent.data.children
+  const list = _.parent.data
   const idx = list.indexOf(row)
 
   list.splice(idx, 1)

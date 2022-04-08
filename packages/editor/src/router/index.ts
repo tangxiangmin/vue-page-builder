@@ -17,7 +17,7 @@ const routes = [
     component: () => import('../views/pageEditor/widgetList.vue')
   },
   {
-    path: '/editor/widget/:id',
+    path: '/editor/widget',
     name: 'editorWidgetDetail',
     component: () => import('../views/pageEditor/widgetDetail.vue')
   },

@@ -3,7 +3,6 @@ import {loadRemoteComponent} from '@vite-plugin-remote-module';
 
 import {defineComponent, h, onMounted, shallowRef} from "vue";
 
-console.log('remove widget')
 export default defineComponent({
   name: "remoteWidget",
   props: {
@@ -18,7 +17,6 @@ export default defineComponent({
     onMounted(() => {
       if (!props.url) return
       loadRemoteComponent(props.url).then(comp => {
-        console.log(comp)
         compRef.value = comp
       })
     })

@@ -1,26 +1,41 @@
+<template>
+  <el-alert title="TODO 加个编辑时预览的功能"></el-alert>
+  <el-button class="my-10px" @click="submit">保存</el-button>
+  <template v-if="currentWidget">
+    <el-row :gutter="10">
+      <el-col :span="12">
+        <CodeEditor class="editor" v-model="currentWidget.content"></CodeEditor>
+      </el-col>
+      <el-col :span="12">
+        <CodeEditor class="editor" v-model="currentWidget.configContent"></CodeEditor>
+      </el-col>
+    </el-row>
+  </template>
+
+</template>
 <script setup lang="ts">
 import {onMounted, ref, watchEffect} from 'vue'
 import {getWidgetDetail, addWidget, editWidget} from '../../api/pageEditor'
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 
 const route = useRoute()
-const routeParams = route.params
+const router = useRouter()
+
+const {id} = route.query
 import CodeEditor from '../../components/CodeEditor.vue'
+import {IWidget} from "../../typings";
+import {ElMessage} from "element-plus";
 
-
-// persist state
-// watchEffect(() => history.replaceState({}, '', store.serialize()))
-
-
-const currentWidget = ref({
-  id: '',
+const currentWidget = ref<IWidget>({
   content: '',
-  name: ''
+  configContent: '',
+  name: '',
+  link: '',
 })
+
 onMounted(() => {
-  if (routeParams.id) {
-    const id = routeParams.id as string
-    getWidgetDetail(id).then(({data}) => {
+  if (id) {
+    getWidgetDetail(id as string).then(({data}) => {
       const filename = `widget_${id}.vue`
       currentWidget.value = data
     })
@@ -28,38 +43,24 @@ onMounted(() => {
 })
 
 async function submit() {
-  let api = currentWidget.value.id ? editWidget : addWidget
-  await api(currentWidget.value)
+  let api = id ? editWidget : addWidget
+  const {data} = await api(currentWidget.value)
+  ElMessage.success('操作成功')
+  if (!id && data.id) {
+    await router.push({
+      name: "editorWidgetDetail",
+      query: {
+        id: data.id
+      }
+    })
+  }
 }
-
-
 </script>
 
-<template>
-  <el-button @click="submit">保存</el-button>
-  <CodeEditor v-if="currentWidget" v-model="currentWidget.content"></CodeEditor>
-
-</template>
-
-<style>
-body {
-  font-size: 13px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
-  Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  margin: 0;
-  --base: #444;
-  --nav-height: 50px;
+<style lang="scss" scoped>
+.editor {
+  border: 1px solid #000;
+  height: 80vh;
 }
 
-.vue-repl {
-  height: calc(var(--vh) - var(--nav-height));
-}
-
-button {
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin: 0;
-  background-color: transparent;
-}
 </style>

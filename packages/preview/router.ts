@@ -6,7 +6,8 @@ import json2sfc from "./json2sfc";
 
 const router = new Router();
 
-
+// todo 根据对应页面的最后更新时间处理缓存
+// 依赖的某个组件更新之后，相关的页面缓存都进行更新
 let cacheMap: any = {}
 
 async function getComponentContent(id: string) {

@@ -1,10 +1,14 @@
 <template>
-  <abstractContainer @click.native="onWidgetClick(comp)" :config="comp" v-for="comp in config.children" :key="comp.id"/>
+  <abstractContainer :class="{'current-widget':currentWidget===comp}"
+                     @click.native="onWidgetClick(comp)"
+                     :config="comp"
+                     v-for="comp in config.children" :key="comp.id"/>
 </template>
 
 <script setup>
-import {defineProps} from "vue";
+import {computed, defineProps} from "vue";
 import abstractContainer from "./components/abstractContainer.vue";
+import {usePageEditorStore} from "../../store/pageEditor";
 
 defineProps({
   config: {
@@ -20,8 +24,17 @@ defineProps({
 
   }
 })
+
+const pageEditorStore = usePageEditorStore()
+const currentWidget = computed(() => {
+  return pageEditorStore.currentWidget
+})
 </script>
 
 <style scoped>
+
+.current-widget {
+  outline: 1px solid red;
+}
 
 </style>

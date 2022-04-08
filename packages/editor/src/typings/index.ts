@@ -1,13 +1,17 @@
 export interface IPage {
-  id: string,
+  id?: string,
   content: string,
-  name: string
+  name: string,
+  link?: string
 }
 
-export interface IWidget {
-  id: string,
+export type IWidget = {
+  id?: string,
   content: string,
-  name: string
+  configContent: string,
+  name: string,
+  link?: string,
+  configLink?: string
 }
 
 export interface IWidgetConfig {

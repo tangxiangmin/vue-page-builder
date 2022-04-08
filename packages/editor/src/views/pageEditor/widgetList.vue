@@ -1,55 +1,111 @@
 <template>
-  <el-table border :data="widgetList">
-    <el-table-column label="id" prop="id" width="200"/>
+  <el-form inline>
+    <el-form-item>
+      <el-button type="primary" @click="onAddClick">新建</el-button>
+    </el-form-item>
+  </el-form>
+  <el-table border :data="list" row-key="id">
+    <el-table-column label="id" prop="id" width="100"/>
     <el-table-column label="名称" prop="name"/>
-    <el-table-column label="content" prop="content"/>
+    <el-table-column label="content">
+      <template v-slot:default="{row}">
+        {{ row.content && row.content.substr(0, 40) }}
+      </template>
+    </el-table-column>
+    <el-table-column label="configContent">
+      <template v-slot:default="{row}">
+        {{ row.configContent && row.content.substr(0, 10) }}
+      </template>
+    </el-table-column>
     <el-table-column label="link" prop="link"/>
     <el-table-column label="操作">
       <template v-slot:default="{row}">
+        <el-button size="small" @click="onEditClick(row)">配置</el-button>
         <el-button size="small" @click="toEditPage(row)">编辑</el-button>
-        <el-button size="small" @click="removeRow(row)">删除</el-button>
+        <el-button size="small" @click="onRemoveClick(row)">删除</el-button>
       </template>
-
     </el-table-column>
   </el-table>
+  <div class="mt-10 flex justify-center">
+    <el-pagination
+        background
+        layout="total, sizes, prev, pager, next, jumper"
+        :current-page="page"
+        :total="total"
+        :page-size="pageSize"
+        @size-change="changeSize"
+        @current-change="changeCurrent"
+    >
+    </el-pagination>
+  </div>
+  <el-dialog v-model="formDialogVisible" :title="currentRow.id ? '编辑':'创建'">
+    <el-form label-width="100px">
+      <el-form-item label="名称">
+        <el-input v-model="currentRow.name"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="onDialogSaveClick" type="primary">保存</el-button>
+      </el-form-item>
+    </el-form>
+  </el-dialog>
 </template>
 
-<script setup>
-import {onMounted, ref} from "vue";
-
+<script setup lang="ts">
 import {useRouter} from "vue-router";
-import {getWidgetList, removeWidget} from "../../api/pageEditor";
+import {IWidget} from "../../typings";
 
+import {addWidget, editWidget, removeWidget} from "../../api/pageEditor";
+import {usePageEditorStore} from "../../store/pageEditor";
+
+import {useCurd} from "../../utils/curd";
+
+const pageEditorStore = usePageEditorStore()
 const router = useRouter()
 
-const widgetList = ref([])
-
-async function getList() {
-  const {data:{list}} = await getWidgetList({pageNum: 1, pageSize: 15})
-  list.forEach(row=>{
-    row.link = `http://localhost:7001/api/widget/file/${row.id}.vue`
-  })
-  widgetList.value = list
+function createTemplateRow(): IWidget {
+  return {
+    name: '',
+    content: '',
+    configContent: '',
+    link: ''
+  }
 }
 
-onMounted(() => {
+function isTemplateRow(row: IWidget): boolean {
+  return !!row.id
+}
 
-  getList()
-})
+const curdApi = {
+  getList: pageEditorStore.getWidgetList,
+  edit: editWidget,
+  add: addWidget,
+  remove: (row: IWidget) => {
+    return removeWidget(row.id as string)
+  }
+}
 
-function toEditPage(row) {
+const {
+  list, page, pageSize, total, changeSize, changeCurrent,
+  currentRow, formDialogVisible,
+  onAddClick, onEditClick, onRemoveClick, onDialogSaveClick
+} = useCurd<IWidget>(
+    {
+      api: curdApi,
+      createTemplateRow,
+      isTemplateRow
+    }
+);
+
+
+function toEditPage(row: IWidget) {
   router.push({
     name: "editorWidgetDetail",
-    params: {
+    query: {
       id: row.id
     }
   })
 }
 
-async function removeRow(row) {
-  await removeWidget(row.id)
-  await getList()
-}
 
 </script>
 

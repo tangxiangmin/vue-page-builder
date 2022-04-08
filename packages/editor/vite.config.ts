@@ -6,7 +6,7 @@ import WindiCSS from 'vite-plugin-windicss'
 // import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 
 import remoteModulePlugin from 'vite-plugin-remote-module'
-
+import vueJsx from "@vitejs/plugin-vue-jsx";
 // @ts-ignore
 import path from "path";
 
@@ -19,6 +19,7 @@ export default defineConfig({
   },
   plugins: [
     vue(),
+    vueJsx(),
     remoteModulePlugin(),
     WindiCSS(),
     // AutoImport({

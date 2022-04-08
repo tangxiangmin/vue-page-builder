@@ -37,13 +37,20 @@ export const usePageEditorStore = defineStore({
       return data
     },
     async getPageList() {
-      const {data} = await getPageList({pageNum: 1, pageSize: 15})
-      const {list} = data
-      const host = 'http://localhost:9988'
-      list.forEach((row: any) => {
-        row.link = `${host}/template?id=${row.id}`
+      const {data: {list, total}} = await getPageList({pageNum: 1, pageSize: 15})
+      list.forEach((row: IPage) => {
+        row.link = `http://localhost:9988/template?id=${row.id}`
       })
-      return list
+      return {list, total}
+    },
+    async getWidgetList({page, pageSize}: { page: number, pageSize: number } = {page: 1, pageSize: 1000}) {
+      const {data: {list, total}} = await getWidgetList({pageNum: page, pageSize})
+      list.map(row => {
+        row.link = `http://localhost:7001/api/widget/file/${row.id}.vue`
+        row.configLink = `http://localhost:7001/api/widget/file_config/${row.id}.vue`
+      })
+
+      return {list, total}
     },
     setCurrentWidget(widget: BaseWidget) {
       this.currentWidget = widget
@@ -55,11 +62,8 @@ export const usePageEditorStore = defineStore({
       list.splice(idx, 0, clone)
     },
     removeWidget(widget: BaseWidget) {
-      console.log(widget)
       let list = this.pageWidgetList
-      console.log(list)
       let idx = list.indexOf(widget)
-      console.log(idx)
       list.splice(idx, 1)
     }
   }

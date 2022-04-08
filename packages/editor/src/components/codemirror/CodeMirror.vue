@@ -3,9 +3,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watchEffect, inject } from 'vue'
-import { debounce } from '../../utils/index'
+import {ref, onMounted, watchEffect, inject} from 'vue'
 import CodeMirror from './codemirror'
+
+import emmet from '@emmetio/codemirror-plugin'
+
+emmet(CodeMirror)
 
 interface Props {
   mode?: string
@@ -28,7 +31,15 @@ onMounted(() => {
     autoCloseBrackets: true,
     autoCloseTags: true,
     foldGutter: true,
-    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+    gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+    extraKeys: {
+      Tab: 'emmetExpandAbbreviation',
+      Esc: 'emmetResetAbbreviation',
+      Enter: 'emmetInsertLineBreak'
+    },
+    emmet: {
+      preview: false
+    },
   }
 
   const editor = CodeMirror(el.value!, {
@@ -70,6 +81,8 @@ onMounted(() => {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  margin: 0;
+  --font-code: Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
 .CodeMirror {
@@ -77,4 +90,5 @@ onMounted(() => {
   line-height: 1.5;
   height: 100%;
 }
+
 </style>

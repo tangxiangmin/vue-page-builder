@@ -1,13 +1,23 @@
-export default function json2sfc(vnode:string) {
+export default function json2sfc(vnode: string) {
+  const data = JSON.parse(vnode)
+  // @ts-ignore
+  const remoteWidgetList = data.children.filter(row => row.type === 'RemoteWidget').map(row => {
+    return row.config.url
+  })
+
+  // 提前加载需要的动态模块
+  const importStr = remoteWidgetList.reduce((acc: string, url: string) => {
+    acc += `import '@remote/${url}'\n`
+    return acc
+  }, '')
+
   return `
 <script>
 import {h, defineComponent} from 'vue'
 import RemoteWidget from "./remoteWidget.vue";
+${importStr}
 
 let simpleMap = {
-  'CustomContainer': 'div',
-  'CustomImage': 'img',
-  'CustomText': 'span',
     RemoteWidget: RemoteWidget
 }
 
@@ -22,18 +32,13 @@ function renderChildren(node) {
 
 function render(node) {
   const {type, config} = node
-  if (type === 'CustomText') {
-    return h('span', config, config.content)
-  }
   const realType = simpleMap[type] || type
-
-
   return h(realType, config, {default: () => renderChildren(node)})
 }
 
     
 export default defineComponent({
-  name: "test",
+  name: "App",
   setup(){
     return {
     }

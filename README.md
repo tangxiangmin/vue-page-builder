@@ -9,12 +9,14 @@
 
 ## 开发环境
 
-整个项目使用learn + yarn workspace 搭建monorepo
+整个项目使用pnpm workspace 搭建monorepo
 
-编辑器, vue + ElementUI
 ```
-npm i 
+pnpm i 
+```
 
+编辑器, vite + vue3 + ElementPlus
+```
 npm run dev
 ```
 
@@ -32,18 +34,13 @@ npm run dev
 
 预览项目, vite + vue3
 ```
-cd client
+cd preview
 
-npm i 
-
-npm run dev
+ts-node server.ts
 ```
 
 ## Feature
 
-* [ ] 基于文档流和DOM树的移动端页面编辑器
-* [ ] 适配Web，后续支持小程序和Flutter
-* [ ] 支持动态数据源
-* [ ] 支持交互逻辑，如点击事件等
 * [ ] 常规内置组件
 * [ ] 用户自定义组件库，可以上传自定义组件，可以从用户端下载
+* [ ] 在线编辑Vue SFC组件文件，即时预览

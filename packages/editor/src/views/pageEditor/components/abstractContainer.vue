@@ -1,8 +1,7 @@
 <script>
-import {h, shallowRef} from 'vue'
+import {computed, h, shallowRef} from 'vue'
 
 import RemoteWidget from './remoteWidget.vue'
-
 
 export default {
   name: "abstractContainer",
@@ -16,9 +15,6 @@ export default {
     const {config} = props
 
     let simpleMap = {
-      'CustomContainer': 'div',
-      'CustomImage': 'img',
-      'CustomText': 'span',
       RemoteWidget: RemoteWidget
     }
 

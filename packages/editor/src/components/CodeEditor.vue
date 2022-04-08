@@ -1,4 +1,6 @@
 <script setup lang="ts">
+// 相关样式参考@vue/repl
+
 import CodeMirror from './codemirror/CodeMirror.vue'
 import { debounce } from '../utils'
 import {computed, inject, ref} from 'vue'
@@ -11,7 +13,6 @@ const $props = defineProps({
 })
 const $emit = defineEmits(['update:modelValue'])
 const onChange = debounce((code: string) => {
-  // store.state.activeFile.code = code
   $emit('update:modelValue', code)
 }, 250)
 

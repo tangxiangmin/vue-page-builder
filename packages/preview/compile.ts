@@ -21,8 +21,7 @@ export async function build(content:string) {
   // 写入
   const target = path.resolve(__dirname,'./src/App.vue')
   await fs.writeFile(target, content)
-
-  console.log(content)
+  // todo SSR编译
   await buildVite(getInlineConfig())
   // todo 把编译后的结果上传到cdn
   const html = await fs.readFile(path.resolve(__dirname,'./dist/index.html'))

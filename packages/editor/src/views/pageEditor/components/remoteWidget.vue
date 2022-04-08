@@ -9,6 +9,12 @@ export default defineComponent({
     url: {
       type: String,
       default: ''
+    },
+    passedProps: {
+      type: Object,
+      default: () => {
+        return {}
+      }
     }
   },
   setup(props) {
@@ -21,13 +27,18 @@ export default defineComponent({
       })
     })
     return () => {
-      if (!compRef.value) return null
-      return h(compRef.value)
+      if (!compRef.value) return h('div',{class:'remote-loading'},['远程模块加载中...'])
+      return h(compRef.value, props.passedProps)
     }
   }
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.remote-loading {
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+}
 
 </style>

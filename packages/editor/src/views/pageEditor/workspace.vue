@@ -8,8 +8,8 @@
     <div class="flex">
       <div class="w-360px">
         <el-tabs type="card" modelValue="1">
-          <el-tab-pane label="组件列表" name="1">
-            <div v-for="group in componentList" :key="group.title" class="cell-group">
+          <el-tab-pane label="控件列表" name="1">
+            <div v-for="group in widgetList" :key="group.title" class="cell-group">
               <div class="cell-group_tt">
                 {{ group.title }}
               </div>
@@ -58,16 +58,21 @@
 
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
-import {useRoute} from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
+
 import {usePageEditorStore} from "../../store/pageEditor";
 
-import {componentList as localComponentList} from "./core/widget";
+import {
+  ContainerWidget,
+  ImageWidget,
+  RemoteWidget,
+  TextWidget,
+  createWidgetFromRemote,
+  widgetList as localWidgetList
+} from "./core/widget";
 import previewMobile from './preview.vue'
 import widgetTree from './components/widgetTree.vue'
 
-import CustomImageConfig from './widgets/customImage/config.vue'
-import CustomTextConfig from './widgets/customText/config.vue'
-import CustomContainerConfig from './widgets/customContainer/config.vue'
 import RemoteWidgetConfig from './widgets/remoteWidget/config.vue'
 
 import BaseWidget from "./core/baseWidget";
@@ -76,17 +81,18 @@ import {ElMessage} from "element-plus";
 
 const pageEditorStore = usePageEditorStore()
 const route = useRoute()
+const router = useRouter()
 
 const id = route.query.id as string
 
 const page = ref({
-  id: '',
   name: '',
   content: {
     children: []
   }
 })
-const componentList = ref([...localComponentList])
+
+const widgetList = ref<{ title: string, list: any[] }[]>([...localWidgetList])
 
 const currentWidget = computed(() => {
   return pageEditorStore.currentWidget
@@ -95,18 +101,30 @@ const currentWidget = computed(() => {
 const currentWidgetConfig = computed(() => {
   if (!currentWidget.value) return null
   const {type} = currentWidget.value
-  const map = {CustomImageConfig, CustomTextConfig, CustomContainerConfig, RemoteWidgetConfig}
+  const map: Record<string, any> = {  RemoteWidgetConfig}
   const key = type[0].toUpperCase() + type.substr(1) + 'Config'
-  // @ts-ignore
   return map[key] || null
 })
+
 
 async function getPageDetail() {
   page.value = await pageEditorStore.getPageDetail(id)
 }
 
+async function getRemoteWidgetList() {
+  const {list} = await pageEditorStore.getWidgetList()
+  const ans = list.map(row => {
+    return createWidgetFromRemote(row)
+  })
+  widgetList.value.push({title: '远程控件', list: ans})
+}
+
 onMounted(() => {
-  getPageDetail()
+  if (id) {
+    getPageDetail()
+  }
+
+  getRemoteWidgetList()
 })
 
 
@@ -114,7 +132,7 @@ function createWidget(Widget: typeof BaseWidget) {
   const widget = new Widget()
   if (page.value) {
     // @ts-ignore
-    page.value?.content.children.push(widget)
+    page.value.content.children.push(widget)
     pageEditorStore.setCurrentWidget(widget)
   }
 }
@@ -124,14 +142,23 @@ function chooseWidget(widget: BaseWidget) {
 }
 
 async function savePage() {
-  let api = page.value.id ? editPage : addPage
+  let api = id ? editPage : addPage
 
   const params = {
     ...page.value,
     content: JSON.stringify(page.value.content),
   }
-  await api(params)
+  const {data} = await api(params)
   ElMessage.success('操作成功')
+  if (!id && data.id) {
+    await router.replace({
+      name: 'editorWorkspace',
+      query: {
+        id: data.id
+      }
+    })
+  }
+
 }
 </script>
 
@@ -140,6 +167,7 @@ async function savePage() {
   width: 375px;
   height: 667px;
   border: 1px solid #000;
+  transform: translateX(0);
 }
 
 .cell-group {

@@ -1,4 +1,4 @@
-import {editorService as request} from '../utils/request'
+import {editorService as request, BaseResponse} from '../utils/request'
 
 import {IWidget, IPage} from "../typings";
 
@@ -15,7 +15,7 @@ export function editPage(data: IPage) {
 }
 
 export function getPageList(params: ISearchParams) {
-  return request.get(`/api/page`, {params})
+  return request.get<any, BaseResponse<{ list: IPage[], total: number }>>(`/api/page`, {params})
 }
 
 export function removePage(id: string) {
@@ -28,7 +28,7 @@ export function getPageDetail(id: string) {
 
 // 组件
 export function addWidget(data: IWidget) {
-  return request.post('/api/widget', data)
+  return request.post<any, BaseResponse<IWidget>>('/api/widget', data)
 }
 
 export function removeWidget(id: string) {
@@ -36,11 +36,11 @@ export function removeWidget(id: string) {
 }
 
 export function editWidget(data: IWidget) {
-  return request.put(`/api/widget/${data.id}`, data)
+  return request.put<any, BaseResponse<IWidget>>(`/api/widget/${data.id}`, data)
 }
 
 export function getWidgetList(params: ISearchParams) {
-  return request.get(`/api/widget`, {params})
+  return request.get<any, BaseResponse<{ list: IWidget[], total: number }>>(`/api/widget`, {params})
 }
 
 export function getWidgetDetail(id: string) {
