@@ -11,4 +11,6 @@ module.exports = app => {
   router.get('/api/widget/file/:id', controller.widget.findWidgetByFileId);
   router.get('/api/widget/file_config/:id', controller.widget.findWidgetConfigByFileId);
 
+  router.post('/api/upload', controller.upload.upload);
+
 };

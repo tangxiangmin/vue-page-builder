@@ -4,10 +4,10 @@
   <template v-if="currentWidget">
     <el-row :gutter="10">
       <el-col :span="12">
-        <CodeEditor class="editor" v-model="currentWidget.content"></CodeEditor>
+        <codeEditor class="editor" v-model="currentWidget.content"></codeEditor>
       </el-col>
       <el-col :span="12">
-        <CodeEditor class="editor" v-model="currentWidget.configContent"></CodeEditor>
+        <codeEditor class="editor" v-model="currentWidget.configContent"></codeEditor>
       </el-col>
     </el-row>
   </template>
@@ -22,7 +22,7 @@ const route = useRoute()
 const router = useRouter()
 
 const {id} = route.query
-import CodeEditor from '../../components/CodeEditor.vue'
+import codeEditor from '../../components/codeEditor.vue'
 import {IWidget} from "../../typings";
 import {ElMessage} from "element-plus";
 
@@ -31,12 +31,12 @@ const currentWidget = ref<IWidget>({
   configContent: '',
   name: '',
   link: '',
+  postfix: 'vue'
 })
 
 onMounted(() => {
   if (id) {
     getWidgetDetail(id as string).then(({data}) => {
-      const filename = `widget_${id}.vue`
       currentWidget.value = data
     })
   }

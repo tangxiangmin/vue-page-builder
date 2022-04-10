@@ -8,6 +8,7 @@ module.exports = {
       name: STRING(30),
       content: TEXT,
       config_content: TEXT,
+      postfix: STRING(10),
       created_at: DATE,
       updated_at: DATE,
     });

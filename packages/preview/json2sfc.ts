@@ -32,8 +32,8 @@ function renderChildren(node) {
 
 function render(node) {
   const {type, config} = node
-  const realType = simpleMap[type] || type
-  return h(realType, config, {default: () => renderChildren(node)})
+  const realType = simpleMap[type] || type || 'div'
+  return h(realType, config, renderChildren(node))
 }
 
     

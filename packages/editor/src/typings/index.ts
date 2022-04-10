@@ -11,7 +11,8 @@ export type IWidget = {
   configContent: string,
   name: string,
   link?: string,
-  configLink?: string
+  configLink?: string,
+  postfix: string
 }
 
 export interface IWidgetConfig {
@@ -20,7 +21,6 @@ export interface IWidgetConfig {
   type: string,
   children: IWidgetConfig[],
   config: {
-    nested: boolean,
     [prop: string]: any
   },
 }

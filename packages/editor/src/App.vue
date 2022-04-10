@@ -43,20 +43,14 @@ type MenuItem = {
 
 const menuList: MenuItem[] = [
   {
-    title: '页面编辑器',
-    index: '2',
-    children: [
-      {
-        route: {name: 'editorPageList'},
-        title: '页面列表',
-        index: '2-1'
-      },
-      {
-        route: {name: 'editorWidgetList'},
-        title: '组件列表',
-        index: '2-2'
-      },
-    ]
+    route: {name: 'editorPageList'},
+    title: '页面列表',
+    index: '2-1'
+  },
+  {
+    route: {name: 'editorWidgetList'},
+    title: '组件列表',
+    index: '2-2'
   },
   // {
   //   title: '问卷管理',

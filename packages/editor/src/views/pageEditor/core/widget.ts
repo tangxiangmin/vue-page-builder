@@ -1,60 +1,6 @@
 import BaseWidget from './baseWidget'
 
 
-export class ImageWidget extends BaseWidget {
-  static label = '图片'
-
-  constructor() {
-    super()
-    this.name = ImageWidget.label
-
-    this.type = 'CustomImage'
-  }
-
-  getConfig() {
-    return {
-      nested: false,
-      src: '/favicon.ico',
-      style: ''
-    }
-  }
-}
-
-export class ContainerWidget extends BaseWidget {
-  static label = '容器'
-
-  constructor() {
-    super()
-    this.name = ContainerWidget.label
-    this.type = 'CustomContainer'
-  }
-
-  getConfig() {
-    return {
-      nested: false,
-      style: 'height:100px;\nbackground:#ccc;'
-    }
-  }
-}
-
-export class TextWidget extends BaseWidget {
-  static label = '文字'
-
-  constructor() {
-    super()
-    this.name = TextWidget.label
-    this.type = 'CustomText'
-  }
-
-  getConfig() {
-    return {
-      nested: false,
-      content: 'hello',
-      style: ''
-    }
-  }
-}
-
 export class RemoteWidget extends BaseWidget {
   static label = '远程模块'
   static url = ''
@@ -69,9 +15,7 @@ export class RemoteWidget extends BaseWidget {
 
   getConfig() {
     return {
-      nested: false,
       url: '',
-      props: ''
     }
   }
 }
@@ -91,6 +35,7 @@ export function createWidgetFromRemote(config: any): typeof RemoteWidget {
       this.type = 'RemoteWidget'
       this.children = []
       this.config.url = link
+      this.config.configUrl = configLink
     }
   }
 

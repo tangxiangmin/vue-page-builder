@@ -7,7 +7,15 @@
   <el-table border :data="list">
     <el-table-column label="id" prop="id" width="200"/>
     <el-table-column label="名称" prop="name"/>
-    <el-table-column label="链接" prop="link"/>
+    <el-table-column label="链接" prop="link">
+      <template v-slot:default="{row}">
+        <urlPreview :url="row.link">
+          <template v-slot:default>
+            {{ row.link }}
+          </template>
+        </urlPreview>
+      </template>
+    </el-table-column>
     <el-table-column label="操作">
       <template v-slot:default="{row}">
         <el-button size="small" @click="onEditClick(row)">
@@ -21,9 +29,6 @@
         </el-button>
         <el-button size="small" @click="onRemoveClick(row)">
           删除
-        </el-button>
-        <el-button size="small" @click="preview(row)">
-          预览
         </el-button>
       </template>
     </el-table-column>
@@ -58,6 +63,7 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 
 import {IWidget, IPage} from "../../typings";
 import {addPage, editPage, removePage} from "../../api/pageEditor";
+import urlPreview from '../../components/urlPreview.vue'
 
 import {useCurd} from "../../utils/curd";
 import {usePageEditorStore} from "../../store/pageEditor";
@@ -121,11 +127,6 @@ async function copyPage(row: IPage) {
   } catch (e) {
     console.log(e)
   }
-}
-
-
-function preview(row: IPage) {
-  window.open(row.link, '_blank')
 }
 
 </script>

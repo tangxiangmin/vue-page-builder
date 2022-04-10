@@ -4,6 +4,8 @@
       <el-button type="primary" @click="savePage">
         保存页面
       </el-button>
+      <el-button @click="undo">撤销</el-button>
+      <el-button @click="redo">重做</el-button>
     </div>
     <div class="flex">
       <div class="w-360px">
@@ -22,7 +24,7 @@
             </div>
           </el-tab-pane>
           <el-tab-pane label="结构树" name="2">
-            <widgetTree v-if="page" :list="page.content.children"/>
+            <widgetTree v-if="page" :list="page.content.children" :recordAction="recordAction"/>
           </el-tab-pane>
         </el-tabs>
       </div>
@@ -37,7 +39,7 @@
             <div v-if="currentWidget" :key="currentWidget.id">
               <el-form label-width="100px">
                 <el-alert title="控件配置" style="margin-bottom: 10px" :closable="false"/>
-                <component :is="currentWidgetConfig" :config="currentWidget.config"/>
+                <RemoteWidgetConfig :config="currentWidget.config"></RemoteWidgetConfig>
               </el-form>
             </div>
             <template v-else>
@@ -62,18 +64,12 @@ import {useRoute, useRouter} from 'vue-router'
 
 import {usePageEditorStore} from "../../store/pageEditor";
 
-import {
-  ContainerWidget,
-  ImageWidget,
-  RemoteWidget,
-  TextWidget,
-  createWidgetFromRemote,
-  widgetList as localWidgetList
-} from "./core/widget";
+import {createWidgetFromRemote, widgetList as localWidgetList} from "./core/widget";
+
 import previewMobile from './preview.vue'
 import widgetTree from './components/widgetTree.vue'
 
-import RemoteWidgetConfig from './widgets/remoteWidget/config.vue'
+import RemoteWidgetConfig from './components/remoteWidgetConfig.vue'
 
 import BaseWidget from "./core/baseWidget";
 import {addPage, editPage} from "../../api/pageEditor";
@@ -87,6 +83,7 @@ const id = route.query.id as string
 
 const page = ref({
   name: '',
+  type: 'pure',
   content: {
     children: []
   }
@@ -98,25 +95,60 @@ const currentWidget = computed(() => {
   return pageEditorStore.currentWidget
 })
 
-const currentWidgetConfig = computed(() => {
-  if (!currentWidget.value) return null
-  const {type} = currentWidget.value
-  const map: Record<string, any> = {  RemoteWidgetConfig}
-  const key = type[0].toUpperCase() + type.substr(1) + 'Config'
-  return map[key] || null
-})
-
-
 async function getPageDetail() {
   page.value = await pageEditorStore.getPageDetail(id)
+  recordAction()
 }
 
 async function getRemoteWidgetList() {
   const {list} = await pageEditorStore.getWidgetList()
-  const ans = list.map(row => {
+  const ans = list.filter(row => row.postfix === 'vue').map(row => {
     return createWidgetFromRemote(row)
   })
   widgetList.value.push({title: '远程控件', list: ans})
+}
+
+
+function recordAction() {
+  pageEditorStore.recordAction(page.value)
+}
+
+async function redo() {
+  const data = await pageEditorStore.redo()
+  if (data) {
+    page.value = data
+  }
+}
+
+async function undo() {
+  const data = await pageEditorStore.undo()
+  if (data) {
+    page.value = data
+  }
+}
+
+function createWidget(Widget: typeof BaseWidget) {
+  const widget = new Widget()
+  // @ts-ignore
+  page.value.content.children.push(widget)
+  pageEditorStore.setCurrentWidget(widget)
+  recordAction()
+}
+
+function chooseWidget(widget: BaseWidget) {
+  pageEditorStore.setCurrentWidget(widget)
+}
+
+async function savePage() {
+  const params = {
+    ...page.value,
+    content: JSON.stringify(page.value.content),
+  }
+  console.log(params)
+
+  await editPage(params)
+
+  ElMessage.success('操作成功')
 }
 
 onMounted(() => {
@@ -127,39 +159,6 @@ onMounted(() => {
   getRemoteWidgetList()
 })
 
-
-function createWidget(Widget: typeof BaseWidget) {
-  const widget = new Widget()
-  if (page.value) {
-    // @ts-ignore
-    page.value.content.children.push(widget)
-    pageEditorStore.setCurrentWidget(widget)
-  }
-}
-
-function chooseWidget(widget: BaseWidget) {
-  pageEditorStore.setCurrentWidget(widget)
-}
-
-async function savePage() {
-  let api = id ? editPage : addPage
-
-  const params = {
-    ...page.value,
-    content: JSON.stringify(page.value.content),
-  }
-  const {data} = await api(params)
-  ElMessage.success('操作成功')
-  if (!id && data.id) {
-    await router.replace({
-      name: 'editorWorkspace',
-      query: {
-        id: data.id
-      }
-    })
-  }
-
-}
 </script>
 
 <style scoped lang="scss">

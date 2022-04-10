@@ -2,7 +2,6 @@
 import {IWidgetConfig} from "../../../typings";
 
 type BaseWidgetConfig = {
-  nested: boolean,
   [prop: string]: any
 }
 
@@ -31,9 +30,7 @@ export default class BaseWidget implements IWidgetConfig {
   }
 
   getConfig(): BaseWidgetConfig {
-    return {
-      nested: false
-    }
+    return {}
   }
 
   initFromJSON(json: string) {

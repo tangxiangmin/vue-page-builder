@@ -7,6 +7,7 @@ module.exports = app => {
     id: { type: INTEGER, primaryKey: true, autoIncrement: true },
     name: STRING(30),
     content: TEXT,
+    postfix: STRING(10),
     configContent: {
       type: TEXT,
       filed: 'config_content',

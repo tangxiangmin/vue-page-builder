@@ -22,7 +22,15 @@ import {usePageEditorStore} from "../../../store/pageEditor";
 import BaseWidget from "../core/baseWidget";
 
 const pageEditorStore = usePageEditorStore()
+
 const $props = defineProps({
+  recordAction: {
+    type: Function,
+    default: () => {
+      return () => {
+      }
+    }
+  },
   list: {
     type: Array,
     default: () => {
@@ -30,6 +38,7 @@ const $props = defineProps({
     }
   }
 })
+
 const defaultProps = {
   children: 'children',
   label: 'name'
@@ -37,6 +46,7 @@ const defaultProps = {
 
 function copyWidget(_: any, row: BaseWidget) {
   pageEditorStore.copyWidget(row)
+  $props.recordAction()
 }
 
 function removeWidget(_: any, row: BaseWidget) {
@@ -44,7 +54,7 @@ function removeWidget(_: any, row: BaseWidget) {
   const idx = list.indexOf(row)
 
   list.splice(idx, 1)
-  // pageEditorStore.removeWidget(row)
+  $props.recordAction()
 }
 </script>
 

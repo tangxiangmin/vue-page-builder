@@ -18,6 +18,7 @@
       </template>
     </el-table-column>
     <el-table-column label="link" prop="link"/>
+    <el-table-column label="类型" prop="postfix"/>
     <el-table-column label="操作">
       <template v-slot:default="{row}">
         <el-button size="small" @click="onEditClick(row)">配置</el-button>
@@ -43,6 +44,9 @@
       <el-form-item label="名称">
         <el-input v-model="currentRow.name"></el-input>
       </el-form-item>
+      <el-form-item label="后缀">
+        <el-input v-model="currentRow.postfix"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button @click="onDialogSaveClick" type="primary">保存</el-button>
       </el-form-item>
@@ -67,7 +71,8 @@ function createTemplateRow(): IWidget {
     name: '',
     content: '',
     configContent: '',
-    link: ''
+    link: '',
+    postfix:''
   }
 }
 

@@ -34,8 +34,7 @@ function createService(config: AxiosRequestConfig) {
 }
 
 
-const defaultService = createService({baseURL: 'http://localhost:1546'})
 
 export const editorService = createService({baseURL: 'http://localhost:7001'})
+export const uploadService = createService({baseURL: 'http://localhost:7001'})
 
-export default defaultService
