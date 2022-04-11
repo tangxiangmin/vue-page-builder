@@ -23,11 +23,19 @@ module.exports = appInfo => {
     // myAppName: 'egg',
   };
 
+  config.cluster = {
+    listen:{
+      path: '',
+      port: 7001,
+      hostname: '0.0.0.0'
+    }
+  }
+
   config.mysql = {
     // 单数据库信息配置
     client: {
       // host
-      host: '127.0.0.1',
+      host: 'database',
       // 端口号
       port: '3306',
       // 用户名
@@ -46,7 +54,7 @@ module.exports = appInfo => {
 
   config.sequelize = {
     dialect: 'mysql',
-    host: '127.0.0.1',
+    host: 'database',
     port: 3306,
     database: 'test',
     user: 'root',

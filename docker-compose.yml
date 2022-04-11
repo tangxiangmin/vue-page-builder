@@ -1,0 +1,29 @@
+version: '3.7'
+services:
+  database:
+    image: mysql
+    restart: always
+    volumes:
+      - ~/data/mysql/data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+    ports:
+      - 3306:3306
+    networks:
+      - app-network
+  server:
+    depends_on:
+      - database
+    build:
+      context: ./
+      dockerfile: ./packages/server/Dockerfile
+    volumes:
+      - .:/projects
+    ports:
+      - 7001:7001
+    tty: true
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge
