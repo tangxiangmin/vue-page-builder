@@ -1,5 +1,5 @@
 <template>
-  <abstractContainer :class="{'current-widget':currentWidget===comp}"
+  <AbstractContainer :class="{'current-widget':currentWidget===comp}"
                      @click.native="onWidgetClick(comp)"
                      :config="comp"
                      v-for="comp in config.children" :key="comp.id"/>
@@ -7,7 +7,7 @@
 
 <script setup>
 import {computed, defineProps} from "vue";
-import abstractContainer from "./components/abstractContainer.vue";
+import {AbstractContainer} from "@vue-page-builder/preview";
 import {usePageEditorStore} from "../../store/pageEditor";
 
 defineProps({

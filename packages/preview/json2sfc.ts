@@ -14,38 +14,15 @@ export default function json2sfc(vnode: string) {
   return `
 <script>
 import {h, defineComponent} from 'vue'
-import RemoteWidget from "./remoteWidget.vue";
+import AbstractContainer from '../shared/abstractContainer.vue'
+
 ${importStr}
 
-let simpleMap = {
-    RemoteWidget: RemoteWidget
-}
-
-function renderChildren(node) {
-  if (!node) return []
-  const {children} = node
-
-  if (!Array.isArray(children)) return children
-
-  return children.map(render)
-}
-
-function render(node) {
-  const {type, config} = node
-  const realType = simpleMap[type] || type || 'div'
-  return h(realType, config, renderChildren(node))
-}
-
-    
 export default defineComponent({
   name: "App",
-  setup(){
-    return {
-    }
-  },
   render(){
-    const config = ${vnode}
-     return render(config)
+     const config = ${vnode}
+     return h(AbstractContainer,{config})
   }
 });
 <\/script>

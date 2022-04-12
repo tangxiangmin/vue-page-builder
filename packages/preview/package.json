@@ -1,12 +1,18 @@
 {
-  "name": "client",
+  "name": "@vue-page-builder/preview",
   "private": true,
   "version": "0.0.0",
+  "types": "shared/index.ts",
+  "main": "shared/index.ts",
+  "module": "shared/index.ts",
   "scripts": {
     "dev": "vite --port 8978",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
   },
+  "files": [
+    "shared"
+  ],
   "dependencies": {
     "axios": "^0.24.0",
     "fs-extra": "^10.0.1",

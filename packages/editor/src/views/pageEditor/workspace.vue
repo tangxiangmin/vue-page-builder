@@ -50,7 +50,9 @@
             todo 页面配置
           </el-tab-pane>
           <el-tab-pane label="JSON" name="3">
-            todo json预览
+            <pre class="text-12px">
+{{page}}
+            </pre>
           </el-tab-pane>
         </el-tabs>
       </div>

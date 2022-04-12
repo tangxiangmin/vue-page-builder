@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+// @ts-ignore
 import {loadRemoteComponent} from '@vite-plugin-remote-module';
 
 import {defineComponent, h, onMounted, shallowRef} from "vue";
@@ -26,6 +27,7 @@ export default defineComponent({
         compRef.value = comp
       })
     })
+
     return () => {
       if (!compRef.value) return h('div',{class:'remote-loading'},['远程模块加载中...'])
       return h(compRef.value, props.passedProps)

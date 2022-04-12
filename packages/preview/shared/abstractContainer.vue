@@ -29,10 +29,7 @@ export default {
 
     function render(node) {
       const {type, config} = node
-      if (type === 'CustomText') {
-        return h('span', config, config.content)
-      }
-      const realType = simpleMap[type] || type
+      const realType = simpleMap[type] || type || 'div'
 
 
       return h(realType, config, {default: () => renderChildren(node)})

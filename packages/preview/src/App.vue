@@ -1,31 +1,11 @@
 
 <script>
 import {h, defineComponent} from 'vue'
-import RemoteWidget from "./remoteWidget.vue";
-import '@remote/http://localhost:7001/api/widget/file/28.vue'
-import '@remote/http://localhost:7001/api/widget/file/28.vue'
+import AbstractContainer from '../shared/abstractContainer.vue'
+
+import '@remote/http://localhost:7001/api/widget/file/1.vue'
 
 
-let simpleMap = {
-    RemoteWidget: RemoteWidget
-}
-
-function renderChildren(node) {
-  if (!node) return []
-  const {children} = node
-
-  if (!Array.isArray(children)) return children
-
-  return children.map(render)
-}
-
-function render(node) {
-  const {type, config} = node
-  const realType = simpleMap[type] || type || 'div'
-  return h(realType, config, renderChildren(node))
-}
-
-    
 export default defineComponent({
   name: "App",
   setup(){
@@ -33,8 +13,8 @@ export default defineComponent({
     }
   },
   render(){
-    const config = {"children":[{"type":"RemoteWidget","name":"hello world","id":1649430472557,"config":{"nested":false,"url":"http://localhost:7001/api/widget/file/28.vue","props":"","configUrl":"http://localhost:7001/api/widget/file_config/28.vue","text":"123213"},"children":[]},{"type":"RemoteWidget","name":"hello world","id":1649576747285,"config":{"url":"http://localhost:7001/api/widget/file/28.vue","configUrl":"http://localhost:7001/api/widget/file_config/28.vue"},"children":[]}]}
-     return render(config)
+     const config = {"children":[{"type":"RemoteWidget","name":"hello world","id":1649684899476,"config":{"url":"http://localhost:7001/api/widget/file/1.vue","configUrl":"http://localhost:7001/api/widget/file_config/1.vue"},"children":[]}]}
+     return h(AbstractContainer,{config})
   }
 });
 </script>
