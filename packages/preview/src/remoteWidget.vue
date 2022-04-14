@@ -23,7 +23,7 @@ export default defineComponent({
 
     onMounted(() => {
       if (!props.url) return
-      loadRemoteComponent(props.url).then(comp => {
+      loadRemoteComponent(props.url).then((comp: object) => {
         compRef.value = comp
       })
     })

@@ -2,12 +2,12 @@
   "name": "@vue-page-builder/preview",
   "private": true,
   "version": "0.0.0",
-  "types": "shared/index.ts",
-  "main": "shared/index.ts",
-  "module": "shared/index.ts",
+  "types": "src/index.ts",
+  "main": "src/index.ts",
+  "module": "src/index.ts",
   "scripts": {
     "dev": "vite --port 8978",
-    "start": "ts-node server.ts",
+    "start": "ts-node server/index.ts",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
   },

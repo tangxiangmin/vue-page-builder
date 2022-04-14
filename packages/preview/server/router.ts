@@ -40,7 +40,7 @@ router.get("/template", async (ctx: any) => {
   if (!html) {
     // 写入内容，然后返回html
     const sfc = json2sfc(content)
-    html = await build(sfc)
+    html = await build(id, sfc)
 
     writeCache(id, html, new Date().toString())
   }

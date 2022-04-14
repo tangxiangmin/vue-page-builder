@@ -145,8 +145,6 @@ async function savePage() {
     ...page.value,
     content: JSON.stringify(page.value.content),
   }
-  console.log(params)
-
   await editPage(params)
 
   ElMessage.success('操作成功')
