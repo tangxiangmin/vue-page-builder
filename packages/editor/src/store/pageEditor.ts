@@ -8,22 +8,26 @@ import BaseWidget from "../views/pageEditor/core/baseWidget";
 
 
 type PageEditorState = {
-  currentPage: IPage | null,
+  currentPage: IPage & {
+    content: { children: BaseWidget[] }
+  } | null,
   currentWidget: BaseWidget | null,
 
   snapshotList: any[],
-  snapshotIndex: number
+  snapshotIndex: number,
+  currentContainer: BaseWidget | null,
 }
 
 export const usePageEditorStore = defineStore({
   id: 'pageEditor',
-  state: (): PageEditorState => {
+  state: function (): PageEditorState {
     return {
       currentPage: null,
       currentWidget: null,
       // 数据快照，用于撤销和重做
       snapshotList: [], // [s1,s2,s3,s4]
-      snapshotIndex: -1
+      snapshotIndex: -1,
+      currentContainer: null,
     }
   },
   getters: {
@@ -65,6 +69,16 @@ export const usePageEditorStore = defineStore({
     },
     setCurrentWidget(widget: BaseWidget) {
       this.currentWidget = widget
+    },
+    setCurrentContainer(widget: BaseWidget | null) {
+      this.currentContainer = widget
+    },
+    addWidget(widget: BaseWidget) {
+      if (this.currentContainer) {
+        this.currentContainer.children.push(widget)
+      } else {
+        this.currentPage?.content?.children.push(widget)
+      }
     },
     copyWidget(widget: BaseWidget) {
       let list = this.pageWidgetList

@@ -1,5 +1,5 @@
 <template>
-  <el-tree :data="list" :props="defaultProps" @node-click="pageEditorStore.setCurrentWidget">
+  <el-tree :data="list" :props="defaultProps" draggable @node-click="pageEditorStore.setCurrentWidget">
     <template #default="{ node, data }">
      <span class="custom-tree-node">
       <span>{{ node.label }}</span>
@@ -49,8 +49,9 @@ function copyWidget(_: any, row: BaseWidget) {
   $props.recordAction()
 }
 
-function removeWidget(_: any, row: BaseWidget) {
-  const list = _.parent.data
+function removeWidget(node: any, row: BaseWidget) {
+  const parent = node.parent
+  const list = parent.data.children || parent.data
   const idx = list.indexOf(row)
 
   list.splice(idx, 1)

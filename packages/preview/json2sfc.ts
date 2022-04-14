@@ -1,12 +1,25 @@
-export default function json2sfc(vnode: string) {
-  const data = JSON.parse(vnode)
-  // @ts-ignore
-  const remoteWidgetList = data.children.filter(row => row.type === 'RemoteWidget').map(row => {
-    return row.config.url
+import {IRemoteWidget} from './shared/types'
+
+function findRemoteWidgetList(list: IRemoteWidget[], urlSet: Set<string>) {
+  list.forEach(row => {
+    const {config: {url}, children} = row
+    urlSet.add(url)
+    if (children.length) {
+      findRemoteWidgetList(children, urlSet)
+    }
   })
+}
+
+export default function json2sfc(vnode: string) {
+  const data: IRemoteWidget = JSON.parse(vnode)
+  const remoteWidgetList = data.children.filter(row => row.type === 'RemoteWidget')
+
+  const list = new Set<string>()
+
+  findRemoteWidgetList(remoteWidgetList, list)
 
   // 提前加载需要的动态模块
-  const importStr = remoteWidgetList.reduce((acc: string, url: string) => {
+  const importStr = Array.from(list).reduce((acc: string, url: string) => {
     acc += `import '@remote/${url}'\n`
     return acc
   }, '')
@@ -21,8 +34,8 @@ ${importStr}
 export default defineComponent({
   name: "App",
   render(){
-     const config = ${vnode}
-     return h(AbstractContainer,{config})
+     const widget = ${vnode}
+     return h(AbstractContainer,{widget})
   }
 });
 <\/script>

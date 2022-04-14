@@ -68,7 +68,7 @@ import {usePageEditorStore} from "../../store/pageEditor";
 
 import {createWidgetFromRemote, widgetList as localWidgetList} from "./core/widget";
 
-import previewMobile from './preview.vue'
+import previewMobile from './components/preview.vue'
 import widgetTree from './components/widgetTree.vue'
 
 import RemoteWidgetConfig from './components/remoteWidgetConfig.vue'
@@ -131,8 +131,7 @@ async function undo() {
 
 function createWidget(Widget: typeof BaseWidget) {
   const widget = new Widget()
-  // @ts-ignore
-  page.value.content.children.push(widget)
+  pageEditorStore.addWidget(widget)
   pageEditorStore.setCurrentWidget(widget)
   recordAction()
 }

@@ -7,6 +7,7 @@
   "module": "shared/index.ts",
   "scripts": {
     "dev": "vite --port 8978",
+    "start": "ts-node server.ts",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"
   },

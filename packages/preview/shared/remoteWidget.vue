@@ -15,10 +15,10 @@ export default defineComponent({
       type: Object,
       default: () => {
         return {}
-      }
-    }
+      },
+    },
   },
-  setup(props) {
+  setup(props, context) {
     const compRef = shallowRef(null)
 
     onMounted(() => {
@@ -29,8 +29,8 @@ export default defineComponent({
     })
 
     return () => {
-      if (!compRef.value) return h('div',{class:'remote-loading'},['远程模块加载中...'])
-      return h(compRef.value, props.passedProps)
+      if (!compRef.value) return h('div', {class: 'remote-loading'}, ['远程模块加载中...'])
+      return h(compRef.value, props.passedProps, context.slots)
     }
   }
 })

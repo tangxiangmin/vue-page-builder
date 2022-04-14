@@ -19,11 +19,6 @@ export default class BaseWidget implements IWidgetConfig {
 
     this.id = +new Date() // todo 随机uuid
 
-    // this.click = {
-    //   type: '',
-    //   args: ''
-    // }
-
     this.config = this.getConfig()
 
     this.children = []
@@ -31,25 +26,5 @@ export default class BaseWidget implements IWidgetConfig {
 
   getConfig(): BaseWidgetConfig {
     return {}
-  }
-
-  initFromJSON(json: string) {
-    try {
-      const {config, children} = JSON.parse(json)
-      this.config = config
-      this.children = children
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
-  clone() {
-    const {config, children} = this
-    // @ts-ignore
-    const instance = new this.constructor()
-    const json = JSON.stringify({config, children})
-
-    instance.initFromJSON(json)
-    return instance
   }
 }

@@ -1,41 +1,51 @@
 import BaseWidget from './baseWidget'
+import {IWidget} from '../../../typings'
 
+interface RemoteWidgetConfig {
+  url: string,
+  configUrl: string,
+  // 远程组件接收到的props
+  props: {
+    [prop: string]: any
+  }
+}
 
 export class RemoteWidget extends BaseWidget {
   static label = '远程模块'
-  static url = ''
 
-  constructor(props: any = {}) {
+  constructor() {
     super()
     this.name = RemoteWidget.label
     this.type = 'RemoteWidget'
-    this.children = []
-    this.config.url = props.url
   }
 
-  getConfig() {
+  getConfig(): RemoteWidgetConfig {
     return {
       url: '',
+      configUrl: '',
+      props: {}
     }
   }
 }
 
 
-export function createWidgetFromRemote(config: any): typeof RemoteWidget {
+export function createWidgetFromRemote(config: IWidget): typeof RemoteWidget {
   const {name, link, configLink} = config
 
   class CustomRemoteWidget extends RemoteWidget {
     static label = name
-    static link = link
-    static configLink = configLink
 
     constructor() {
       super()
       this.name = name
-      this.type = 'RemoteWidget'
-      this.children = []
-      this.config.url = link
-      this.config.configUrl = configLink
+    }
+
+    getConfig(): RemoteWidgetConfig {
+      return {
+        url: link,
+        configUrl: configLink,
+        props: {}
+      }
     }
   }
 

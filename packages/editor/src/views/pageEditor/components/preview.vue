@@ -1,16 +1,16 @@
 <template>
   <AbstractContainer :class="{'current-widget':currentWidget===comp}"
                      @click.native="onWidgetClick(comp)"
-                     :config="comp"
-                     v-for="comp in config.children" :key="comp.id"/>
+                     :widget="comp"
+                     v-for="comp in widgetList" :key="comp.id"/>
 </template>
 
 <script setup>
 import {computed, defineProps} from "vue";
 import {AbstractContainer} from "@vue-page-builder/preview";
-import {usePageEditorStore} from "../../store/pageEditor";
+import {usePageEditorStore} from "../../../store/pageEditor";
 
-defineProps({
+const props = defineProps({
   config: {
     type: Object,
     require: true
@@ -21,8 +21,12 @@ defineProps({
       return () => {
       }
     }
-
   }
+})
+
+const widgetList = computed(() => {
+  const {children} = props.config
+  return children
 })
 
 const pageEditorStore = usePageEditorStore()
