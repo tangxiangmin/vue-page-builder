@@ -39,7 +39,7 @@
             <div v-if="currentWidget" :key="currentWidget.id">
               <el-form label-width="100px">
                 <el-alert title="控件配置" style="margin-bottom: 10px" :closable="false"/>
-                <RemoteWidgetConfig :config="currentWidget.config"></RemoteWidgetConfig>
+<!--                <RemoteWidgetConfig :config="currentWidget.config"></RemoteWidgetConfig>-->
               </el-form>
             </div>
             <template v-else>
@@ -71,7 +71,7 @@ import {createWidgetFromRemote, widgetList as localWidgetList} from "./core/widg
 import previewMobile from './components/preview.vue'
 import widgetTree from './components/widgetTree.vue'
 
-import RemoteWidgetConfig from './components/remoteWidgetConfig.vue'
+// import RemoteWidgetConfig from './components/remoteWidgetConfig.vue'
 
 import BaseWidget from "./core/baseWidget";
 import {addPage, editPage} from "../../api/pageEditor";

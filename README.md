@@ -60,6 +60,7 @@ ts-node server.ts
 
 ## 相关文档
 
+* [一个基于远程模块的低代码平台](https://www.shymean.com/article/一个基于远程模块的低代码平台)，记录了整个项目的实现思路和相关原理
 * [关于低代码平台的思考](https://www.shymean.com/article/关于低代码平台的思考)
 * [使用vite加载远程模块](https://www.shymean.com/article/使用vite加载远程模块)
 * [前端服务化——页面搭建工具的死与生](https://www.cnblogs.com/sskyy/p/6496287.html), 写的非常好
